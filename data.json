@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@admin.com",
+      "password": "123456789aA",
+      "role": "administrador",
+      "status": "activo"
+    }
+  ]
+}
