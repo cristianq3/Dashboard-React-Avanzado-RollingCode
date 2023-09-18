@@ -9,11 +9,16 @@ import LoginPage from '../pages/LoginPage';
 import Page404 from '../pages/Page404';
 import ProductsPage from '../pages/ProductsPage';
 import DashboardAppPage from '../pages/DashboardAppPage';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { isLogged } = useSelector((state) => state.auth);
+  console.log(isLogged)
   const routes = useRoutes([
+    {path: '/', element: isLogged ? <DashboardAppPage />: <Navigate to='/login'/> },
+    
     {
       path: '/dashboard',
       element: <DashboardLayout />,
