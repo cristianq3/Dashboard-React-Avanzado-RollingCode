@@ -1,5 +1,5 @@
 {
-  "users": [
+  "usuarios": [
     {
       "id": 1,
       "username": "admin",
@@ -7,6 +7,220 @@
       "password": "123456789aA",
       "role": "administrador",
       "status": "activo"
+    },
+    {
+      "id": 2,
+      "username": "john_doe",
+      "email": "johndoe@email.com",
+      "password": "pass1234",
+      "role": "usuario",
+      "status": "activo"
+    },
+    {
+      "id": 3,
+      "username": "jane_smith",
+      "email": "janesmith@email.com",
+      "password": "securePass",
+      "role": "usuario",
+      "status": "activo"
+    },
+    {
+      "id": 4,
+      "username": "moderator_1",
+      "email": "moderator1@email.com",
+      "password": "moderatorPass",
+      "role": "moderador",
+      "status": "activo"
+    },
+    {
+      "id": 5,
+      "username": "alex_brown",
+      "email": "alexbrown@email.com",
+      "password": "secureModerator",
+      "role": "moderador",
+      "status": "activo"
+    },
+    {
+      "id": 6,
+      "username": "user_3",
+      "email": "user3@email.com",
+      "password": "password123",
+      "role": "usuario",
+      "status": "activo"
+    },
+    {
+      "id": 7,
+      "username": "emma_jones",
+      "email": "emmajones@email.com",
+      "password": "securePassword",
+      "role": "usuario",
+      "status": "activo"
+    },
+    {
+      "id": 8,
+      "username": "admin2",
+      "email": "admin2@admin.com",
+      "password": "adminPass123",
+      "role": "administrador",
+      "status": "activo"
+    },
+    {
+      "id": 9,
+      "username": "user_5",
+      "email": "user5@email.com",
+      "password": "password123",
+      "role": "usuario",
+      "status": "activo"
+    },
+    {
+      "id": 10,
+      "username": "grace_miller",
+      "email": "gracemiller@email.com",
+      "password": "securePassword",
+      "role": "usuario",
+      "status": "activo"
+    }
+  ],
+  "event": [
+    {
+      "id": 1,
+      "producer": "Espectáculos Brillantes",
+      "name": "Noche de Estrellas",
+      "description": "Una noche mágica llena de estrellas y sorpresas.",
+      "province": "Buenos Aires",
+      "address": "Avenida Corrientes 1234, Buenos Aires",
+      "date": "15 de noviembre de 2023",
+      "status": "activo",
+      "imageCard": "www.nochedeestrellas.com/card.jpg",
+      "imageSlider": "www.nochedeestrellas.com/slider1.jpg",
+      "imageSlider2": "www.nochedeestrellas.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 2,
+      "producer": "CordobaShow",
+      "name": "Fiesta de las Luces",
+      "description": "Una fiesta deslumbrante llena de luces y música.",
+      "province": "Córdoba",
+      "address": "Calle San Martín 567, Córdoba",
+      "date": "5 de diciembre de 2023",
+      "status": "activo",
+      "imageCard": "www.fiestadelasluces.com/card.jpg",
+      "imageSlider": "www.fiestadelasluces.com/slider1.jpg",
+      "imageSlider2": "www.fiestadelasluces.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 3,
+      "producer": "Spectacular Events",
+      "name": "Magia en la Playa",
+      "description": "Un espectáculo de magia en la hermosa playa de Santa Fe.",
+      "province": "Santa Fe",
+      "address": "Avenida Costanera 890, Santa Fe",
+      "date": "20 de septiembre de 2023",
+      "status": "activo",
+      "imageCard": "www.magiaenlaplaya.com/card.jpg",
+      "imageSlider": "www.magiaenlaplaya.com/slider1.jpg",
+      "imageSlider2": "www.magiaenlaplaya.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 4,
+      "producer": "Eventos Argentinos",
+      "name": "Concierto bajo las Estrellas",
+      "description": "Un emocionante concierto bajo el cielo estrellado de Mendoza.",
+      "province": "Mendoza",
+      "address": "Plaza Independencia s/n, Mendoza",
+      "date": "10 de octubre de 2023",
+      "status": "activo",
+      "imageCard": "www.conciertobajoestrellas.com/card.jpg",
+      "imageSlider": "www.conciertobajoestrellas.com/slider1.jpg",
+      "imageSlider2": "www.conciertobajoestrellas.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 5,
+      "producer": "Aurora Productions",
+      "name": "Noche de Magia",
+      "description": "Una noche mágica llena de ilusiones y sorpresas en Salta.",
+      "province": "Salta",
+      "address": "Calle Belgrano 432, Salta",
+      "date": "3 de noviembre de 2023",
+      "status": "activo",
+      "imageCard": "www.nochedemagia.com/card.jpg",
+      "imageSlider": "www.nochedemagia.com/slider1.jpg",
+      "imageSlider2": "www.nochedemagia.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 6,
+      "producer": "Showtime Argentina",
+      "name": "Fiesta de la Fantasía",
+      "description": "Una fiesta de ensueño llena de fantasía y diversión en Neuquén.",
+      "province": "Neuquén",
+      "address": "Avenida Fantasía 123, Neuquén",
+      "date": "8 de diciembre de 2023",
+      "status": "activo",
+      "imageCard": "www.fiestadelafantasia.com/card.jpg",
+      "imageSlider": "www.fiestadelafantasia.com/slider1.jpg",
+      "imageSlider2": "www.fiestadelafantasia.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 7,
+      "producer": "Espectáculos del Sur",
+      "name": "Gala de Danza en la Playa",
+      "description": "Una impresionante gala de danza en la playa de Río Negro.",
+      "province": "Río Negro",
+      "address": "Playa del Mar 567, Río Negro",
+      "date": "12 de octubre de 2023",
+      "status": "activo",
+      "imageCard": "www.galadedanza.com/card.jpg",
+      "imageSlider": "www.galadedanza.com/slider1.jpg",
+      "imageSlider2": "www.galadedanza.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 8,
+      "producer": "Eventos Estelares",
+      "name": "Concierto de Rock en la Montaña",
+      "description": "Un épico concierto de rock en las montañas de San Juan.",
+      "province": "San Juan",
+      "address": "Montaña Rock 789, San Juan",
+      "date": "25 de noviembre de 2023",
+      "status": "activo",
+      "imageCard": "www.conciertoderock.com/card.jpg",
+      "imageSlider": "www.conciertoderock.com/slider1.jpg",
+      "imageSlider2": "www.conciertoderock.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 9,
+      "producer": "Mágica Producciones",
+      "name": "Noche de Ilusiones en el Bosque",
+      "description": "Una noche mágica llena de ilusiones en el bosque de Chaco.",
+      "province": "Chaco",
+      "address": "Bosque Encantado 101, Chaco",
+      "date": "18 de octubre de 2023",
+      "status": "activo",
+      "imageCard": "www.nochedeilusiones.com/card.jpg",
+      "imageSlider": "www.nochedeilusiones.com/slider1.jpg",
+      "imageSlider2": "www.nochedeilusiones.com/slider2.jpg",
+      "likes": 0
+    },
+    {
+      "id": 10,
+      "producer": "Estrellas del Espectáculo",
+      "name": "Gala de Circo en el Desierto",
+      "description": "Una increíble gala de circo en el desierto de La Pampa.",
+      "province": "La Pampa",
+      "address": "Desierto Arena 555, La Pampa",
+      "date": "7 de diciembre de 2023",
+      "status": "activo",
+      "imageCard": "www.galadecirco.com/card.jpg",
+      "imageSlider": "www.galadecirco.com/slider1.jpg",
+      "imageSlider2": "www.galadecirco.com/slider2.jpg",
+      "likes": 0
     }
   ]
 }
