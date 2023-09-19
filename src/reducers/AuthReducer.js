@@ -15,7 +15,7 @@ export const AuthReducer = (state={}, action) => {
                     ...state,
                     user: null,
                     isLogged: false,
-                    errorMessage: ''
+                    errorMessage: action.payload.errorMessage
                 };    
         
         default:
