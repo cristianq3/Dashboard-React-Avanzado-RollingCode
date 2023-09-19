@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from '../layouts/dashboard';
@@ -9,14 +10,17 @@ import LoginPage from '../pages/LoginPage';
 import Page404 from '../pages/Page404';
 import ProductsPage from '../pages/ProductsPage';
 import DashboardAppPage from '../pages/DashboardAppPage';
+import { RegisterPage } from '../pages/RegisterPage';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { isLogged } = useSelector((state) => state.auth);
+  console.log(isLogged);
   const routes = useRoutes([
     {
       path: '/dashboard',
-      element: <DashboardLayout />,
+      element: isLogged ? <DashboardLayout /> : <Navigate to="/login" />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
@@ -28,6 +32,10 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'register',
+      element: <RegisterPage />,
     },
     {
       element: <SimpleLayout />,
