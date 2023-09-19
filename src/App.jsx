@@ -7,14 +7,14 @@ import ThemeProvider from "./theme";
 //components
 import { StyledChart } from "./components/chart";
 import ScrollToTop from "./components/scroll-to-top";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
+// import { Provider } from "react-redux";
+// import { store } from "./store/store";
 
 // ----------------------------------------------------------------------
 
 export default function App() {
   return (
-    <Provider store={store}>
+    // <Provider store={store}>
       <HelmetProvider>
         <BrowserRouter>
           <ThemeProvider>
@@ -24,6 +24,6 @@ export default function App() {
           </ThemeProvider>
         </BrowserRouter>
       </HelmetProvider>
-    </Provider>
+    // </Provider>
   );
 }

@@ -10,19 +10,23 @@ import LoginPage from '../pages/LoginPage';
 import Page404 from '../pages/Page404';
 import ProductsPage from '../pages/ProductsPage';
 import DashboardAppPage from '../pages/DashboardAppPage';
-import { RegisterPage } from '../pages/RegisterPage';
+import  RegisterPage  from '../pages/RegisterPage';
 import AuthLayout from '../layouts/authuser/AuthLayout';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { userInfo, isLogged } = useSelector((state) => state.auth);
-  console.log(isLogged);
+  const {state } = useContext(AuthContext)
+  // const { userInfo, isLogged } = useSelector((state) => state.auth);
+  // console.log(isLogged);
   const routes = useRoutes([
     {
       path: '/dashboard',
       element:
-        userInfo.role === 'Administrador' && isLogged ? (
+        state.isLogged ? (
           <DashboardLayout />
         ) : (
           <Navigate to="/auth/login" />

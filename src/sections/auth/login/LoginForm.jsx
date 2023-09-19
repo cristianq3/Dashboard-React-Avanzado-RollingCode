@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
+  const { state, login } = useContext(AuthContext)
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
+    login('juan@gmail.com', '12345');
+    console.log(state.isLogged)
     navigate('/dashboard', { replace: true });
   };
 
