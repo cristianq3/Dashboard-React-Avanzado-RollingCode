@@ -50,14 +50,14 @@ export default function RegisterForm() {
           required
           fullWidth
           id="email"
-          label="Correo Electronico"
-          name="mail"
+          label="Correo electronico"
+          name="email"
           autoComplete="email"
         />
 
         <TextField
           name="password"
-          label="Password"
+          label="Contraseña"
           required
           id="password"
           autoComplete="new-password"
