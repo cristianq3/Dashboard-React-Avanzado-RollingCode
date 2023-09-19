@@ -11,6 +11,7 @@ import Page404 from '../pages/Page404';
 import ProductsPage from '../pages/ProductsPage';
 import DashboardAppPage from '../pages/DashboardAppPage';
 import { RegisterPage } from '../pages/RegisterPage';
+import AuthLayout from '../layouts/authuser/AuthLayout';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ export default function Router() {
         userInfo.role === 'Administrador' && isLogged ? (
           <DashboardLayout />
         ) : (
-          <Navigate to="/login" />
+          <Navigate to="/auth/login" />
         ),
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
@@ -34,14 +35,27 @@ export default function Router() {
         { path: 'blog', element: <BlogPage /> },
       ],
     },
+
     {
-      path: 'login',
-      element: <LoginPage />,
+      path: '/auth',
+      element: <AuthLayout />,
+      children: [
+        { element: <Navigate to="/auth/login" />, index: true },
+        { path: 'login', element: <LoginPage /> },
+        { path: 'register', element: <RegisterPage /> },
+        // { path: 'products', element: <ProductsPage /> },
+        // { path: 'blog', element: <BlogPage /> },
+      ],
     },
-    {
-      path: 'register',
-      element: <RegisterPage />,
-    },
+    // {
+    //   path: 'login',
+    //   element: <LoginPage />,
+    // },
+    // {
+    //   path: 'register',
+    //   element: <RegisterPage />,
+    // },
+
     {
       element: <SimpleLayout />,
       children: [
