@@ -15,12 +15,17 @@ import { RegisterPage } from '../pages/RegisterPage';
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { isLogged } = useSelector((state) => state.auth);
+  const { userInfo, isLogged } = useSelector((state) => state.auth);
   console.log(isLogged);
   const routes = useRoutes([
     {
       path: '/dashboard',
-      element: isLogged ? <DashboardLayout /> : <Navigate to="/login" />,
+      element:
+        userInfo.role === 'Administrador' && isLogged ? (
+          <DashboardLayout />
+        ) : (
+          <Navigate to="/login" />
+        ),
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },

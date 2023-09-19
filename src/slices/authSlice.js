@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const INITIAL_AUTH_STATE = {
-  isLogged: false,
+  isLogged: true,
   userInfo: {
     id: null,
     username: null,
     email: null,
     password: null,
-    role: null,
+    role: 'Administrador',
     status: null,
   },
   userToken: null,
