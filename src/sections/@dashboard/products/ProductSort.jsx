@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useState } from "react";
 // @mui
-import { Menu, Button, MenuItem, Typography } from '@mui/material';
+import { Menu, Button, MenuItem, Typography } from "@mui/material";
 // component
-import Iconify from '../../../components/iconify';
+import Iconify from "../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
 const SORT_BY_OPTIONS = [
-  { value: 'featured', label: 'Featured' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'priceDesc', label: 'Price: High-Low' },
-  { value: 'priceAsc', label: 'Price: Low-High' },
+  { value: "destacados", label: "Destacados" },
+  { value: "masNuevos", label: "Más nuevos" },
+  { value: "mayorPrecio", label: "Mayor precio" },
+  { value: "menorPrecio", label: "Menor precio" },
 ];
 
 export default function ShopProductSort() {
@@ -30,11 +30,19 @@ export default function ShopProductSort() {
         color="inherit"
         disableRipple
         onClick={handleOpen}
-        endIcon={<Iconify icon={open ? 'eva:chevron-up-fill' : 'eva:chevron-down-fill'} />}
+        endIcon={
+          <Iconify
+            icon={open ? "eva:chevron-up-fill" : "eva:chevron-down-fill"}
+          />
+        }
       >
-        Sort By:&nbsp;
-        <Typography component="span" variant="subtitle2" sx={{ color: 'text.secondary' }}>
-          Newest
+        Ordenar por:&nbsp;
+        <Typography
+          component="span"
+          variant="subtitle2"
+          sx={{ color: "text.secondary" }}
+        >
+          Más nuevos
         </Typography>
       </Button>
       <Menu
@@ -42,15 +50,15 @@ export default function ShopProductSort() {
         anchorEl={open}
         open={Boolean(open)}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
         {SORT_BY_OPTIONS.map((option) => (
           <MenuItem
             key={option.value}
-            selected={option.value === 'newest'}
+            selected={option.value === "masNuevos"}
             onClick={handleClose}
-            sx={{ typography: 'body2' }}
+            sx={{ typography: "body2" }}
           >
             {option.label}
           </MenuItem>
