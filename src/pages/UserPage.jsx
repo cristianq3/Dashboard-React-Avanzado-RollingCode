@@ -160,7 +160,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> Usuarios | Minimal UI </title>
+        <title> Dashboard: Usuarios | Minimal UI </title>
       </Helmet>
 
       <Container>
