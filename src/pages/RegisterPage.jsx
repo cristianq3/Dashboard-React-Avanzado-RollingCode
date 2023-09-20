@@ -6,10 +6,9 @@ import {  Container, Typography, Divider, Stack, Button } from '@mui/material';
 import useResponsive from '../hooks/useResponsive';
 // components
 import Logo from '../components/logo';
-import Iconify from '../components/iconify';
 // sections
-import { LoginForm } from '../sections/auth/login';
 import { Link } from 'react-router-dom';
+import RegisterForm from '../sections/auth/register/RegisterForm';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +40,7 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const mdUp = useResponsive('up', 'md');
 
   return (
@@ -71,15 +70,15 @@ export default function LoginPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Iniciar sesión
+              Crear una cuenta
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
-              ¿Todavía no tenes una cuenta? {''}
-              <Link variant="subtitle2" to='/auth/register'>Registrate aquí</Link>
+              ¿Ya tenés una cuenta? {''}
+              <Link variant="subtitle2" to='/auth/login'>Iniciar sesión</Link>
             </Typography>
 
-            <LoginForm />
+            <RegisterForm />
           </StyledContent>
         </Container>
       </StyledRoot>
