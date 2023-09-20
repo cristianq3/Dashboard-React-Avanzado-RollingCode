@@ -5,7 +5,7 @@ import { types } from "../types/types";
 import { dashAxios } from "../config/dashAxios";
 
 const initialState = {
-    isLogged: true,
+    isLogged: false,
     user: null,
   //  userInfo: {
     //   id: null,
@@ -27,10 +27,10 @@ export const AuthProvider = ({ children }) => {
 
         console.log(email, password)    
         const userData = {
-            name: 'Juan',
-            lastName: 'Perez',
-            email: 'juan@gmail.com',
-            token: 'vkjmnfvkl'
+            name: 'Cristian',
+            lastName: 'Quiroga',
+            email: 'cristian@gmail.com',
+            token: '1A23Ad'
         }
 
         dispatch({
@@ -67,7 +67,9 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         dispatch({
-            type: types.auth.onLogout
+            type: types.auth.logout,
+            payload: {errorMessage:''}
+            
         })
     }
     return (

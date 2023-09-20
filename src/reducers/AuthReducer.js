@@ -4,7 +4,7 @@ export const AuthReducer = (state={}, action) => {
     switch (action.type) {
         case types.auth.login:
             return {
-                ... state,
+                ...state,
                 user: action.payload.user,
                 isLogged: true,
                 errorMessage: ''
@@ -16,6 +16,7 @@ export const AuthReducer = (state={}, action) => {
                     user: null,
                     isLogged: false,
                     errorMessage: action.payload.errorMessage
+                    
                 };    
         
         default:
