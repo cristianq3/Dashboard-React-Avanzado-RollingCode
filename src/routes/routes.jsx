@@ -1,4 +1,5 @@
-import { useSelector } from "react-redux";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 import { Navigate, useRoutes } from "react-router-dom";
 // layouts
 import DashboardLayout from "../layouts/dashboard";
@@ -12,22 +13,17 @@ import ProductsPage from "../pages/ProductsPage";
 import DashboardAppPage from "../pages/DashboardAppPage";
 import RegisterPage from "../pages/RegisterPage";
 import AuthLayout from "../layouts/authuser/AuthLayout";
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { Loading } from "../components/loading/Loading";
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { state, checkAuthToken } = useContext(AuthContext);
+  const { checkAuthToken, state } = useContext(AuthContext);
   
   useEffect(() =>{
     checkAuthToken()
   }, [])
 
-  if(state.isLoading){
-    return <h1>Cargando...</h1>
-  }
-  
   const routes = useRoutes([
     {
       path: "/dashboard",
@@ -35,7 +31,7 @@ export default function Router() {
         <DashboardLayout />
       ) : (
         <Navigate to="/auth/login" />
-      ),
+        ),
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
@@ -68,6 +64,10 @@ export default function Router() {
       element: <Navigate to="/404" replace />,
     },
   ]);
+
+  if(state.isLoading){
+    return <Loading></Loading>
+  }
 
   return routes;
 }
