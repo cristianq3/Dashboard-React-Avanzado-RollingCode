@@ -12,14 +12,22 @@ import ProductsPage from "../pages/ProductsPage";
 import DashboardAppPage from "../pages/DashboardAppPage";
 import RegisterPage from "../pages/RegisterPage";
 import AuthLayout from "../layouts/authuser/AuthLayout";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { state } = useContext(AuthContext);
+  const { state, checkAuthToken } = useContext(AuthContext);
+  
+  useEffect(() =>{
+    checkAuthToken()
+  }, [])
 
+  if(state.isLoading){
+    return <h1>Cargando...</h1>
+  }
+  
   const routes = useRoutes([
     {
       path: "/dashboard",

@@ -7,7 +7,8 @@ export const AuthReducer = (state={}, action) => {
                 ...state,
                 user: action.payload.user,
                 isLogged: true,
-                errorMessage: ''
+                errorMessage: '',
+                isLoading: false
             };
         
         case types.auth.logout:
@@ -15,8 +16,8 @@ export const AuthReducer = (state={}, action) => {
                     ...state,
                     user: null,
                     isLogged: false,
-                    errorMessage: action.payload.errorMessage
-                    
+                    errorMessage: action.payload.errorMessage,
+                    isLoading: action.payload.isLoading
                 };    
         
         case types.auth.registerUser:
