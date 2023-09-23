@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // @mui
 import {
@@ -12,15 +12,20 @@ import {
 import { LoadingButton } from "@mui/lab";
 // components
 import Iconify from "../../../components/iconify";
+import { useForm } from '../../../hooks/useForm';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
   const navigate = useNavigate();
-
+  const {formState, onInputChange } = useForm()
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleClick = () => {
+  const {registerUser} = useContext(AuthContext)
+  
+  const handleClick = (event) => {
+    event.preventDefault();
+    registerUser(formState.firstname, formState.lastname, formState.email, formState.password)
     navigate("/dashboard", { replace: true });
   };
 
@@ -29,21 +34,23 @@ export default function RegisterForm() {
       <Stack spacing={3}>
         <TextField
           autoComplete="given-name"
-          name="firstName"
+          name="firstname"
           required
           fullWidth
-          id="firstName"
+          id="firstname"
           label="Nombre"
           autoFocus
+          onChange={(event ) => onInputChange(event)}
         />
 
         <TextField
           required
           fullWidth
-          id="lastName"
+          id="lastname"
           label="Apellido"
-          name="lastName"
+          name="lastname"
           autoComplete="family-name"
+          onChange={(event ) => onInputChange(event)}
         />
 
         <TextField
@@ -53,6 +60,7 @@ export default function RegisterForm() {
           label="Correo electronico"
           name="email"
           autoComplete="email"
+          onChange={(event ) => onInputChange(event)}
         />
 
         <TextField
@@ -62,6 +70,7 @@ export default function RegisterForm() {
           id="password"
           autoComplete="new-password"
           type={showPassword ? "text" : "password"}
+          onChange={(event ) => onInputChange(event)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

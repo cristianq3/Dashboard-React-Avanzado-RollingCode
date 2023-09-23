@@ -23,6 +23,21 @@ export const AuthProvider = ({ children }) => {
     
     const [state, dispatch] = useReducer(AuthReducer, initialState)
 
+    const registerUser = (firstname, lastname, email, password) => {
+        // aqui va el post del registro
+        // una vez registrado, se logea
+        dispatch({
+            type: types.auth.login,
+            payload: {
+                user: {
+                    firstname, 
+                    lastname, 
+                    email, 
+                    password
+                }
+            }
+        })
+    }
     const login = ( email, password ) => {
 
         console.log(email, password)    
@@ -76,7 +91,8 @@ export const AuthProvider = ({ children }) => {
         <AuthContext.Provider value={{
             state,
             login,
-            logout
+            logout,
+            registerUser
         }}>
             {children}
         </AuthContext.Provider>

@@ -19,6 +19,11 @@ export const AuthReducer = (state={}, action) => {
                     
                 };    
         
+        case types.auth.registerUser:
+            return {
+                ...state,
+            }        
+
         default:
             return state;
     }
