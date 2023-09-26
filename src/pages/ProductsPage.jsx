@@ -1,7 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 // @mui
-import { Container, Stack, Typography } from "@mui/material";
+import { Container, Stack, Typography, Button } from "@mui/material";
+
+// @mui iconos
+import Iconify from "../components/iconify";
+
 // components
 import {
   ProductSort,
@@ -11,6 +15,7 @@ import {
 } from "../sections/@dashboard/products";
 // mock
 import PRODUCTS from "../_mock/products";
+import { Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -28,14 +33,20 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Productos | Minimal UI </title>
+        <title> Productos </title>
       </Helmet>
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Productos
         </Typography>
-
+        <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            href="/dashboard/addproduct"
+          >
+            Nuevo Producto
+          </Button>
         <Stack
           direction="row"
           flexWrap="wrap-reverse"
