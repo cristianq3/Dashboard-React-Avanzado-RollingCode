@@ -23,6 +23,7 @@ export default function LoginForm() {
     event.preventDefault();
     console.log(formState)
     login(formState.email, formState.password);
+    console.log('login')
     navigate('/dashboard', { replace: true });
   };
 
