@@ -13,7 +13,7 @@ const initialState = {
 export const ProductProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(ProductReducer, initialState);
-  const api = dashAxios();
+  
   
   const addProduct = async (values) => {
     try {
