@@ -40,56 +40,34 @@ export const AuthProvider = ({ children }) => {
   };
 
   const checkAuthToken = async () => {
-    const token = localStorage.getItem('tokenAuth');
+    try {
+      const token = localStorage.getItem('tokenAuth');
       if (!token) {
         return dispatch({
           type: types.auth.logout,
           payload: {
             errorMessage: '',
-            // isLoading: false,
           },
         });
       }
       const { data } = await dashAxios.get(`auth/revalidatetoken`);
-
-      localStorage.setItem('tokenAuth', data.token);
-
+      localStorage.setItem('tokenAuth', data.res.token);
+      //console.log(data,'data')
       dispatch({
         type: types.auth.login,
         payload: {
-          user: data,
+          user: data.res,
         },
       });
-    // const token = localStorage.getItem("tokenAuth")
-    // console.log(token)
-    // if(token !== null) {
-    //     const { data } = await dashAxios.get('auth/revalidatetoken')
-    //     console.log(data)
-    //     localStorage.getItem("tokenAuth", data.token);
-    //     return dispatch({
-    //         type: types.auth.logout,
-    //         payload: {
-    //           errorMessage: "",
-    //           isLoading: false,
-    //         },
-    //       });
-    // }
-    // dispatch({
-    //     type: types.auth.login,
-    //     payload: {
-    //       user: userData,
-    //     },
-    //   });
-//----------
-    // if (!token) {
-    //   return dispatch({
-    //     type: types.auth.logout,
-    //     payload: {
-    //       errorMessage: "",
-    //       isLoading: false,
-    //     },
-    //   });
-    // }
+    } catch (error) {
+      localStorage.removeItem('tokenAuth')
+      dispatch({
+        type: types.auth.logout,
+        payload: {
+          errorMessage: '',
+        },
+      });
+    }
  
   };
 
@@ -107,63 +85,23 @@ export const AuthProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      console.log(error)
-      const data  = error.response.data.mensaje;
-      console.log('data', data)
+      const { msg }  = error.response.data.errores[0];
       dispatch({
         type: types.auth.logout,
         payload: {
-          errorMessage: data,
+          errorMessage: msg,
+    
         },
       });
     }
-    //     console.log(email, password)
-    //     const userData = {
-    //         name: 'Cristian',
-    //         lastName: 'Quiroga',
-    //         email: 'cristian@gmail.com',
-    //         token: '1A23Ad'
-    //     }
-    //    localStorage.setItem('tokenAuth', userData.token)
-    //    console.log(localStorage.getItem('tokenAuth'))
-
-    //     dispatch({
-    //         type: types.auth.login,
-    //         payload: {
-    //             user: userData
-    //         }
-    //     })
   };
-  //------para cuando tengamos la BD
-  // const login = async (email, password) =>{
-  //     try {
-  //     const {data} = await dashAxios.post('auth', {
-  //      email: email,
-  //      password: password
-  //     });
-  //     dispatch({
-  //         type:  types.auth.login,
-  //         payload:  {
-  //             user: data.res
-  //         }
-  //     });
-  // } catch (error) {
-  //     const { data }  = error.response
-
-  //     dispatch({
-  //         type: types.auth.logout,
-  //         payload: {
-  //             errorMessage: data.msg
-  //         }
-  //     })
-  // }
-  // }
 
   const logout = () => {
-    localStorage.removeItem("tokenAuth");
+    localStorage.removeItem('tokenAuth')
     dispatch({
       type: types.auth.logout,
       payload: { errorMessage: "" },
+    
     });
   };
 

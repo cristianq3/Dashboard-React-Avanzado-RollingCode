@@ -17,7 +17,7 @@ export const AuthReducer = (state={}, action) => {
                     user: null,
                     isLogged: false,
                     errorMessage: action.payload.errorMessage,
-                    isLoading: action.payload.isLoading
+                    isLoading: false
                 };    
         
         case types.auth.registerUser:

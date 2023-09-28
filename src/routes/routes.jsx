@@ -20,9 +20,9 @@ import { Loading } from "../components/loading/Loading";
 export default function Router() {
   const { checkAuthToken, state } = useContext(AuthContext);
   
-  useEffect(() =>{
+   useEffect(() =>{
     checkAuthToken()
-  }, [])
+   }, [])
 
   const routes = useRoutes([
     {
@@ -30,7 +30,7 @@ export default function Router() {
       element: state.isLogged ? (
         <DashboardLayout />
       ) : (
-        <Navigate to="/auth/login" />
+        <Navigate to="/auth/login"/>
         ),
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
@@ -40,17 +40,15 @@ export default function Router() {
         { path: "blog", element: <BlogPage /> },
       ],
     },
-
     {
       path: "/auth",
-      element: <AuthLayout />,
+      element: !state.isLogged ? (<AuthLayout />) : (<Navigate to="/dashboard"/>),
       children: [
         { element: <Navigate to="/auth/login" />, index: true },
         { path: "login", element: <LoginPage /> },
         { path: "register", element: <RegisterPage /> },
       ],
     },
-
     {
       element: <SimpleLayout />,
       children: [
