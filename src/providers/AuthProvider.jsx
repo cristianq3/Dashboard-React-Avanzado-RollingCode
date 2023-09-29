@@ -23,20 +23,30 @@ const initialState = {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-  const registerUser = (firstname, lastname, email, password) => {
-    // aqui va el post del registro
-    // una vez registrado, se logea
-    dispatch({
-      type: types.auth.login,
-      payload: {
-        user: {
-          firstname,
-          lastname,
-          email,
-          password,
+  const registerUser = async (firstname, lastname, email, password) => {
+    try {
+      const { data } = await dashAxios.post("auth/registerclient", {
+        firstname, 
+        lastname, 
+        email, 
+        password
+      })
+      localStorage.setItem("tokenAuth", data.token);
+      dispatch({
+        type: types.auth.login,
+        payload: {
+          user: data,
         },
-      },
-    });
+      });
+    } catch (error) {
+      const {msg} = error.response.data.errores[0]
+      dispatch({
+        type: types.auth.logout,
+        payload: {
+          errorMessage: msg,
+        },
+      });
+    }
   };
 
   const checkAuthToken = async () => {
