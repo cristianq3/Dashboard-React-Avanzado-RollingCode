@@ -26,7 +26,6 @@ export default function RegisterForm() {
   const handleClick = (event) => {
     event.preventDefault();
     registerUser(formState.firstname, formState.lastname, formState.email, formState.password)
-    navigate("/dashboard", { replace: true });
   };
 
   return (
