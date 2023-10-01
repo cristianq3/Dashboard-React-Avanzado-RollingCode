@@ -22,9 +22,7 @@ import {
 import Avatar from "@mui/material/Avatar";
 import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
 import { LoadingButton } from "@mui/lab";
-import { FormHelperText } from "@mui/material";
 // components
-import Iconify from "../../../components/iconify";
 import { ProductContext } from "../../../contexts/ProductContext";
 
 // ----------------------------------------------------------------------
@@ -80,20 +78,20 @@ export default function ProductAdd() {
               <Grid item xs={12}>
                 <TextField
                   autoFocus
-                  name="nombreProducto"
+                  name="productName"
                   type="text"
                   required
                   fullWidth
-                  id="nombreProducto"
+                  id="productName"
                   label="Nombre del producto"
                   autoComplete="off"
-                  value={values.nombreProducto}
+                  value={values.productName}
                   error={
-                    touched.nombreProducto && errors.nombreProducto
+                    touched.productName && errors.productName
                       ? true
                       : false
                   }
-                  helperText={touched.nombreProducto && errors.nombreProducto}
+                  helperText={touched.productName && errors.productName}
                   onChange={handleChange}
                 />
               </Grid>
