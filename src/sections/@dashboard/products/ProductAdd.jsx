@@ -12,12 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Link,
-  Stack,
-  IconButton,
-  InputAdornment,
   TextField,
-  Checkbox,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
@@ -28,8 +23,11 @@ import { ProductContext } from "../../../contexts/ProductContext";
 // ----------------------------------------------------------------------
 
 const schema = Yup.object().shape({
-  nombreProducto: Yup.string().required("Debes ingresar un nombre"),
+  productName: Yup.string().required("Debes ingresar un nombre"),
+  price: Yup.number().required("Debes ingresar el precio"),
+  stock: Yup.number().required("Debes ingresar el stock"),
   idCategoria: Yup.number().required("Debes seleccionar una categoría"),
+  detalil: Yup.string().required("Debes ingresar una descripción "),
 });
 
 export default function ProductAdd() {
@@ -37,8 +35,12 @@ export default function ProductAdd() {
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
-        nombreProducto: "",
-        idCategoria: null,
+        productName: "",
+        price: "",
+        stock: "",
+        status: "activo",
+        idCategoria: "",
+        detalil: "",
       },
       validationSchema: schema,
 
@@ -54,7 +56,6 @@ export default function ProductAdd() {
       <Container component="main" maxWidth="sm">
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "left",
@@ -87,9 +88,7 @@ export default function ProductAdd() {
                   autoComplete="off"
                   value={values.productName}
                   error={
-                    touched.productName && errors.productName
-                      ? true
-                      : false
+                    touched.productName && errors.productName ? true : false
                   }
                   helperText={touched.productName && errors.productName}
                   onChange={handleChange}
@@ -97,7 +96,7 @@ export default function ProductAdd() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoFocus
+                  
                   name="price"
                   type="number"
                   required
@@ -106,18 +105,14 @@ export default function ProductAdd() {
                   label="Precio"
                   autoComplete="off"
                   value={values.price}
-                  error={
-                    touched.price && errors.price
-                      ? true
-                      : false
-                  }
+                  error={touched.price && errors.price ? true : false}
                   helperText={touched.price && errors.price}
                   onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoFocus
+                  
                   name="stock"
                   type="number"
                   required
@@ -126,17 +121,13 @@ export default function ProductAdd() {
                   label="Stock"
                   autoComplete="off"
                   value={values.stock}
-                  error={
-                    touched.stock && errors.stock
-                      ? true
-                      : false
-                  }
+                  error={touched.stock && errors.stock ? true : false}
                   helperText={touched.stock && errors.stock}
                   onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Box >
+                <Box>
                   <FormControl fullWidth>
                     <InputLabel id="idCategoria">Categoría</InputLabel>
                     <Select
@@ -158,7 +149,7 @@ export default function ProductAdd() {
                 </Box>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Box >
+                <Box>
                   <FormControl fullWidth>
                     <InputLabel id="status">Estado</InputLabel>
                     <Select
@@ -180,29 +171,39 @@ export default function ProductAdd() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  autoFocus
+                  
                   name="detalil"
-                  type="text"
+                  type="multiline"
+                  maxRows={3}
                   required
                   fullWidth
                   id="detalil"
                   label="Descripción"
                   autoComplete="off"
                   value={values.detalil}
-                  error={
-                    touched.detalil && errors.detalil
-                      ? true
-                      : false
-                  }
+                  error={touched.detalil && errors.detalil ? true : false}
                   helperText={touched.detalil && errors.detalil}
                   onChange={handleChange}
                 />
               </Grid>
-              
+              <Grid item xs={12}>
+                <TextField
+                  name="image"
+                  type="file"
+                  required
+                  fullWidth
+                  id="image"
+                  autoComplete="off"
+                  value={values.image}
+                  error={touched.image && errors.image ? true : false}
+                  helperText={touched.image && errors.image}
+                  onChange={handleChange}
+                />
+              </Grid>
             </Grid>
           </Box>
           <LoadingButton
-          sx={{ mt: 3 }}
+            sx={{ mt: 3 }}
             size="large"
             type="submit"
             variant="contained"

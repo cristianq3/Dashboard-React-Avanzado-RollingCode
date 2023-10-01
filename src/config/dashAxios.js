@@ -2,10 +2,13 @@ import axios from 'axios';
 
 
 export const dashAxios = axios.create({
-    // tomo el puerto que está en la bd de ariel
-    baseURL: 'http://localhost:4000/api/',
+    baseURL: import.meta.env.VITE_API_BACKEND,
     timeout: 12000,
-    headers: {
-
+});
+dashAxios.interceptors.request.use( config  => {
+    config.headers = {
+        ...config.headers,
+        'x-token': localStorage.getItem('tokenAuth'),
     }
+    return  config;
 });

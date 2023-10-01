@@ -17,7 +17,7 @@ export const ProductProvider = ({ children }) => {
   
   const addProduct = async (values) => {
     try {
-      const response = await api.post("/productos", {
+      const response = await dashAxios.post("/products", {
         idCategoria: values.idCategoria,
         nombreProducto: values.nombreProducto,
         precio: values.precio,
