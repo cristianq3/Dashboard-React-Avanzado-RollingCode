@@ -2,6 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
 import { useState } from "react";
+import { useContext } from 'react';
+import { UsersContext } from '../../src/contexts/UsersContext' 
 // @mui
 import {
   Card,
@@ -30,15 +32,16 @@ import Scrollbar from "../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
 import USERLIST from "../_mock/user";
+import UserListGrid from "../sections/@dashboard/user/UserListGrid";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "nombre", label: "Nombre", alignRight: false },
-  { id: "compañia", label: "Compañia", alignRight: false },
-  { id: "rol", label: "Rol", alignRight: false },
-  { id: "verificado", label: "Verificado", alignRight: false },
-  { id: "estado", label: "Estado", alignRight: false },
+  { id: "firstname", label: "Nombre", alignRight: false },
+  { id: "lastname", label: "Apellido", alignRight: false },
+  { id: "email", label: "Email", alignRight: false },
+  { id: "role", label: "Rol", alignRight: false },
+  { id: "status", label: "Estado", alignRight: false },
   { id: "" },
 ];
 
@@ -77,6 +80,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
+  const { state, getListUsers } = useContext(UsersContext)
+
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -181,6 +186,8 @@ export default function UserPage() {
           </Button>
         </Stack>
 
+        {/* <UserListGrid></UserListGrid> */}
+        
         <Card>
           <UserListToolbar
             numSelected={selected.length}
