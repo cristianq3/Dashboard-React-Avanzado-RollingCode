@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useContext } from 'react';
 import { UsersContext } from '../../src/contexts/UsersContext' 
 // @mui
@@ -33,12 +33,12 @@ import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
 import USERLIST from "../_mock/user";
 import UserListGrid from "../sections/@dashboard/user/UserListGrid";
+import users from "../_mock/user";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "firstname", label: "Nombre", alignRight: false },
-  { id: "lastname", label: "Apellido", alignRight: false },
+  { id: "firstname", label: "Nombre Completo", alignRight: false },
   { id: "email", label: "Email", alignRight: false },
   { id: "role", label: "Rol", alignRight: false },
   { id: "status", label: "Estado", alignRight: false },
@@ -73,14 +73,19 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 export default function UserPage() {
-  const { state, getListUsers } = useContext(UsersContext)
+  const { state, getListUsers, isLoading } = useContext(UsersContext)
+
+  useEffect(() =>{ 
+    getListUsers()
+    console.log(state.users)
+  }, [])
 
   const [open, setOpen] = useState(null);
 
@@ -90,11 +95,13 @@ export default function UserPage() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState("name");
+  const [orderBy, setOrderBy] = useState("firstname");
 
   const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -112,18 +119,18 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = state.users.map((n) => n.firstname);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, firstname) => {
+    const selectedIndex = selected.indexOf(firstname);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, firstname);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -152,10 +159,10 @@ export default function UserPage() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - state.users.length) : 0;
 
   const filteredUsers = applySortFilter(
-    USERLIST,
+    state.users,
     getComparator(order, orderBy),
     filterName
   );
@@ -202,7 +209,7 @@ export default function UserPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={state.users.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -212,20 +219,20 @@ export default function UserPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const {
-                        id,
-                        name,
+                        _id,
+                        firstname,
+                        lastname,
+                        email,
                         role,
                         status,
-                        company,
-                        avatarUrl,
-                        isVerified,
+                     
                       } = row;
-                      const selectedUser = selected.indexOf(name) !== -1;
+                      const selectedUser = selected.indexOf(firstname) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={selectedUser}
@@ -233,7 +240,7 @@ export default function UserPage() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={selectedUser}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, firstname)}
                             />
                           </TableCell>
 
@@ -243,25 +250,25 @@ export default function UserPage() {
                               alignItems="center"
                               spacing={2}
                             >
-                              <Avatar alt={name} src={avatarUrl} />
+                              {/* <Avatar alt={name} src={avatarUrl} /> */}
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {firstname+' '+lastname}
                               </Typography>
                             </Stack>
                           </TableCell>
 
-                          <TableCell align="left">{company}</TableCell>
+                          <TableCell align="left">{email}</TableCell>
 
                           <TableCell align="left">{role}</TableCell>
 
-                          <TableCell align="left">
-                            {isVerified ? "Si" : "No"}
-                          </TableCell>
+                          {/* <TableCell align="left">
+                            {status}
+                          </TableCell> */}
 
                           <TableCell align="left">
                             <Label
                               color={
-                                (status === "inactivo" && "error") || "success"
+                                (status === "Inactivo" && "error") || "success"
                               }
                             >
                               {sentenceCase(status)}
@@ -328,7 +335,7 @@ export default function UserPage() {
             }}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={state.users.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

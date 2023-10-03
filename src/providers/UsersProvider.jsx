@@ -17,14 +17,13 @@ const initialState = {
     // TODO: hacer las consultas del CRUD con el backend
     const getListUsers = async () => {
         try {
-            const { users } = await dashAxios.get('auth/')
-            console.log(users)
-            // dispatch({
-            //     type: types.users.getListUsers,
-            //     payload: {
-            //         users
-            //     }
-            // })
+            const {data}  = await dashAxios.get('auth/')
+            dispatch({
+                type: types.users.getListUsers,
+                payload: {
+                    users: data
+                }
+            })
 
         } catch(error) {
             console.log(error)
