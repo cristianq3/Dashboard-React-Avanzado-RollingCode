@@ -38,12 +38,20 @@ export const ProductProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const getListCategories = async () => {
+    try {
+      const response = await dashAxios.get("/categories");
+      console.log(response.data);
+    }catch(error){
+      console.log(error);
+    }}
 
   return (
     <ProductContext.Provider
       value={{
         state,
         addProduct,
+        getListCategories
       }}
     >
       {children}

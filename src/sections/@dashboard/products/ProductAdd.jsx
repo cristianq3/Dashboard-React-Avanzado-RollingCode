@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -22,6 +22,8 @@ import { ProductContext } from "../../../contexts/ProductContext";
 
 // ----------------------------------------------------------------------
 
+
+
 const schema = Yup.object().shape({
   productName: Yup.string().required("Debes ingresar un nombre"),
   price: Yup.number().required("Debes ingresar el precio"),
@@ -31,7 +33,14 @@ const schema = Yup.object().shape({
 });
 
 export default function ProductAdd() {
-  const { addProduct } = useContext(ProductContext);
+//no estoy pudiendo traer las categorias
+  useEffect(()=>{
+    const categories = getListCategories();
+    console.log(categories)
+  },[]);
+
+
+  const { addProduct, getListCategories } = useContext(ProductContext);
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
