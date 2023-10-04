@@ -17,23 +17,22 @@ export const ProductProvider = ({ children }) => {
   
   const addProduct = async (values) => {
     try {
-      const response = await dashAxios.post("/products", {
-        idCategoria: values.idCategoria,
-        nombreProducto: values.nombreProducto,
-        precio: values.precio,
-        imagenTarjeta: values.imagenTarjeta,
-        imagenDetalle: values.imagenDetalle,
-        detalle: values.detalle,
-        stock: values.stock,
-        estado: values.estado,
-      });
-      if (response.status === 201) {
-        dispatch({
-          type: types.products.addProduct,
-          payload: values,
-        });
-      }
-      alert("Usuario creado correctamente");
+      console.log(values)
+      // const response = await dashAxios.post("/products", {
+      //   productName: values.productName,
+      //   price: "",
+      //   stock: "",
+      //   status: "activo",
+      //   category: "",
+      //   detail: "",
+      // });
+      // if (response.status === 201) {
+      //   dispatch({
+      //     type: types.products.addProduct,
+      //     payload: values,
+      //   });
+      // }
+      // alert("Usuario creado correctamente");
     } catch (error) {
       console.log(error);
     }
@@ -41,7 +40,8 @@ export const ProductProvider = ({ children }) => {
   const getListCategories = async () => {
     try {
       const response = await dashAxios.get("/categories");
-      console.log(response.data);
+      // console.log(response.data);
+      return response.data
     }catch(error){
       console.log(error);
     }}

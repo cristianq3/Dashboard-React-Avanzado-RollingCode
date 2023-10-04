@@ -22,34 +22,32 @@ import { ProductContext } from "../../../contexts/ProductContext";
 
 // ----------------------------------------------------------------------
 
-
-
 const schema = Yup.object().shape({
   productName: Yup.string().required("Debes ingresar un nombre"),
   price: Yup.number().required("Debes ingresar el precio"),
   stock: Yup.number().required("Debes ingresar el stock"),
-  idCategoria: Yup.number().required("Debes seleccionar una categoría"),
-  detalil: Yup.string().required("Debes ingresar una descripción "),
+  category: Yup.number().required("Debes seleccionar una categoría"),
+  detail: Yup.string().required("Debes ingresar una descripción "),
 });
 
 export default function ProductAdd() {
-//no estoy pudiendo traer las categorias
-  useEffect(()=>{
-    const categories = getListCategories();
-    console.log(categories)
-  },[]);
-
-
   const { addProduct, getListCategories } = useContext(ProductContext);
+  // const {categories, setCategories}= useState([])
+  //no estoy pudiendo traer las categorias
+  useEffect(() => {
+    // setCategories ( getListCategories());
+    
+  }, []);
+
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
         productName: "",
         price: "",
         stock: "",
-        status: "activo",
-        idCategoria: "",
-        detalil: "",
+        status: "Activo",
+        category: "",
+        detail: "",
       },
       validationSchema: schema,
 
@@ -105,7 +103,6 @@ export default function ProductAdd() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  
                   name="price"
                   type="number"
                   required
@@ -121,7 +118,6 @@ export default function ProductAdd() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  
                   name="stock"
                   type="number"
                   required
@@ -138,18 +134,24 @@ export default function ProductAdd() {
               <Grid item xs={12} sm={6}>
                 <Box>
                   <FormControl fullWidth>
-                    <InputLabel id="idCategoria">Categoría</InputLabel>
+                    <InputLabel id="category">Categoría</InputLabel>
                     <Select
-                      name="idCategoria"
-                      labelId="idCategoria"
-                      id="idCategoria"
-                      value={values.idCategoria}
+                      name="category"
+                      labelId="category"
+                      id="category"
+                      value={values.category}
                       label="Categoría"
                       onChange={(e) => {
-                        setFieldValue("idCategoria", e.target.value);
+                        setFieldValue("category", e.target.value);
                       }}
                       required
                     >
+                      {/* {
+                        categories.map((category) => {
+                          <MenuItem key={category._id} value={category.categoryName}>
+                            {category.categoryName}
+                          </MenuItem>;
+                        })} */}
                       <MenuItem value="1">Mujer</MenuItem>
                       <MenuItem value="2">Hombre</MenuItem>
                       <MenuItem value="3">Niños</MenuItem>
@@ -172,26 +174,25 @@ export default function ProductAdd() {
                       }}
                       required
                     >
-                      <MenuItem value="activo">Activo</MenuItem>
-                      <MenuItem value="inactivo">Inactivo</MenuItem>
+                      <MenuItem value="Activo">Activo</MenuItem>
+                      <MenuItem value="Inactivo">Inactivo</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  
-                  name="detalil"
+                  name="detail"
                   type="multiline"
                   maxRows={3}
                   required
                   fullWidth
-                  id="detalil"
+                  id="detail"
                   label="Descripción"
                   autoComplete="off"
-                  value={values.detalil}
-                  error={touched.detalil && errors.detalil ? true : false}
-                  helperText={touched.detalil && errors.detalil}
+                  value={values.detail}
+                  error={touched.detail && errors.detail ? true : false}
+                  helperText={touched.detail && errors.detail}
                   onChange={handleChange}
                 />
               </Grid>
