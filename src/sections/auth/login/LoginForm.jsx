@@ -22,7 +22,6 @@ export default function LoginForm() {
   const handleClick = (event) => {
     event.preventDefault();
     login(formState.email, formState.password);
-    navigate('/dashboard', { replace: true });
   };
 
   return (

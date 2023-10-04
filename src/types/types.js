@@ -10,5 +10,11 @@ export const types = {
         editUser: '[USERS] - EDITUSER',
         deleteUser: '[USERS] - DELETEUSER',
         changePassword: '[USERS] - CHANGEPASSWORD'
+    },
+    products: {
+        listProducts: '[PRODUCTS] - LISTPRODUCTS',
+        addProduct: '[PRODUCTS] - ADDPRODUCT',
+        editProduct: '[PRODUCTS] - EDITPRODUCT',
+        deleteProduct: '[PRODUCTS] - DELETEPRODUCT',
     }
 }

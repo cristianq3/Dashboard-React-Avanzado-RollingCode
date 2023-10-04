@@ -15,6 +15,7 @@ import RegisterPage from "../pages/RegisterPage";
 import AuthLayout from "../layouts/authuser/AuthLayout";
 import { Loading } from "../components/loading/Loading";
 import ContainerUserForm from "../sections/@dashboard/user/ContainerUserForm";
+import ProductAdd from "../sections/@dashboard/products/ProductAdd";
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,7 @@ export default function Router() {
         { path: "user", element: <UserPage /> },
         { path: "user/new", element: <ContainerUserForm /> },
         { path: "products", element: <ProductsPage /> },
+        { path: "addproduct", element: <ProductAdd /> },
         { path: "blog", element: <BlogPage /> },
       ],
     },
@@ -65,8 +67,8 @@ export default function Router() {
     },
   ]);
 
-  if(state.isLoading){
-    return <Loading></Loading>
+  if (state.isLoading) {
+    return <Loading></Loading>;
   }
 
   return routes;
