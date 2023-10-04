@@ -14,6 +14,7 @@ import DashboardAppPage from "../pages/DashboardAppPage";
 import RegisterPage from "../pages/RegisterPage";
 import AuthLayout from "../layouts/authuser/AuthLayout";
 import { Loading } from "../components/loading/Loading";
+import ContainerUserForm from "../sections/@dashboard/user/ContainerUserForm";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
         { path: "user", element: <UserPage /> },
+        { path: "user/new", element: <ContainerUserForm /> },
         { path: "products", element: <ProductsPage /> },
         { path: "blog", element: <BlogPage /> },
       ],

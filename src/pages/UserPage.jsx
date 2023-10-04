@@ -32,8 +32,8 @@ import Scrollbar from "../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
 import USERLIST from "../_mock/user";
-import UserListGrid from "../sections/@dashboard/user/UserListGrid";
 import users from "../_mock/user";
+import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -100,7 +100,6 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
 
 
   const handleOpenMenu = (event) => {
@@ -186,14 +185,12 @@ export default function UserPage() {
             Usuarios
           </Typography>
           <Button
-            variant="contained"
+            variant="contained" href='/dashboard/user/new'
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             Nuevo Usuario
           </Button>
         </Stack>
-
-        {/* <UserListGrid></UserListGrid> */}
         
         <Card>
           <UserListToolbar
