@@ -21,9 +21,7 @@ export default function LoginForm() {
 
   const handleClick = (event) => {
     event.preventDefault();
-    console.log(formState)
     login(formState.email, formState.password);
-    navigate('/dashboard', { replace: true });
   };
 
   return (
