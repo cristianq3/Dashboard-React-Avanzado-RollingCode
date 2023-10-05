@@ -9,20 +9,31 @@ export const UsersReducer = (state={}, action) => {
                 errorMessage: '',
                 isLoading: false
             };
+
+        case types.users.createUser:
+            return {
+                ...state,
+                users: action.payload.users,
+                errorMessage: "",
+                isLoading: false,
+            };
+
+        case types.users.editUser:
+            return {
+                ...state,
+                users: action.payload.users,
+                errorMessage: "",
+                isLoading: false,
+            };    
+        case types.users.deleteUser:
+            return {
+                ...state,
+                users: action.payload.users,
+                errorMessage: "",
+                isLoading: false,
+            } 
         
-        // case types.auth.logout:
-        //     return {
-        //             ...state,
-        //             user: null,
-        //             isLogged: false,
-        //             errorMessage: action.payload.errorMessage,
-        //             isLoading: false
-        //         };    
-        
-        // case types.auth.registerUser:
-        //     return {
-        //         // ...state,
-        //     }        
+        //TODO: getUser y changePassword
 
         default:
             return state;

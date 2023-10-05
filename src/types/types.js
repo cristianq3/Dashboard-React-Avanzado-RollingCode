@@ -7,6 +7,7 @@ export const types = {
     users: {
         getListUsers: '[USERS] - LISTUSERS',
         getUser: '[USERS] - GETUSER',
+        createUser: '[USERS] - CREATEUSER',
         editUser: '[USERS] - EDITUSER',
         deleteUser: '[USERS] - DELETEUSER',
         changePassword: '[USERS] - CHANGEPASSWORD'
