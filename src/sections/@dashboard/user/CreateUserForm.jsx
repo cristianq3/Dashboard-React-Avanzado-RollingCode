@@ -4,6 +4,7 @@ import * as Yup from "yup";
 
 // @mui
 import {
+  Alert,
   Container,
   Box,
   Grid,
@@ -19,6 +20,7 @@ import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
 import { LoadingButton } from "@mui/lab";
 import { UsersContext } from "../../../contexts/UsersContext";
 import { VALID_PASSWORD_REGEX } from "../../../helpers/regExp";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 const schema = Yup.object().shape({
@@ -55,12 +57,13 @@ const schema = Yup.object().shape({
 });
 
 export default function CreateUserForm() {
-  const { createUser } = useContext(UsersContext);
+  const { createUser, state, getListUsers } = useContext(UsersContext);
+  const navigate = useNavigate()
   // const {categories, setCategories}= useState([])
   //no estoy pudiendo traer las categorias
+  
   useEffect(() => {
-    // setCategories ( getListCategories());
-    
+    getListUsers()
   }, []);
 
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
@@ -79,7 +82,10 @@ export default function CreateUserForm() {
       onSubmit: (values, { resetForm }) => {
         console.log(values);
         createUser(values);
-        resetForm();
+        if(state.errorMessage === "") {
+          navigate('/dashboard/user')
+        }
+        // resetForm();
       },
     });
 
@@ -248,6 +254,9 @@ export default function CreateUserForm() {
 
             </Grid>
           </Box>
+          <Grid  display={!!state.errorMessage ? '' : 'none'}>
+            <Alert severity="error">{state.errorMessage}</Alert>
+          </Grid>
           <LoadingButton
             sx={{ mt: 3 }}
             size="large"

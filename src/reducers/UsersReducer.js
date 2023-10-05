@@ -14,7 +14,7 @@ export const UsersReducer = (state={}, action) => {
             return {
                 ...state,
                 users: action.payload.users,
-                errorMessage: "",
+                errorMessage: action.payload.errorMessage,
                 isLoading: false,
             };
 

@@ -20,6 +20,7 @@ export const UsersProvider = ({ children }) => {
       dispatch({
         type: types.users.getListUsers,
         payload: {
+            ...state,
           users: data,
         },
       });
@@ -40,9 +41,25 @@ export const UsersProvider = ({ children }) => {
         status,
         image,
       });
-      console.log(data)
+
+      dispatch({
+        type: types.users.createUser,
+        payload: {
+          ...state,
+          errorMessage: '',
+        },
+
+      });
     } catch (error) {
-      console.log(error);
+    //   console.log(error);
+      const msg = error.response.data.errores[0].msg
+      console.log('ERROR', msg)
+      dispatch({
+        type: types.users.createUser,
+        payload: {
+          errorMessage: msg,
+        },
+      });
     }
   };
 
