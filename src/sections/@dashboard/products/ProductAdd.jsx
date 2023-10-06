@@ -23,21 +23,27 @@ import { ProductContext } from "../../../contexts/ProductContext";
 // ----------------------------------------------------------------------
 
 const schema = Yup.object().shape({
-  productName: Yup.string().required("Debes ingresar un nombre"),
-  price: Yup.number().required("Debes ingresar el precio"),
-  stock: Yup.number().required("Debes ingresar el stock"),
-  category: Yup.number().required("Debes seleccionar una categoría"),
-  detail: Yup.string().required("Debes ingresar una descripción "),
+  productName: Yup.string().required(
+    "Debes ingresar un nombre"
+  ),
+  price: Yup.string().required("Debes ingresar el precio"),
+  stock: Yup.string().required("Debes ingresar el stock"),
+  category: Yup.string().required(
+    "Debes seleccionar una categoría"
+  ),
+  detail: Yup.string().required(
+    "Debes ingresar una descripción "
+  ),
 });
 
 export default function ProductAdd() {
-  const { addProduct, getListCategories } = useContext(ProductContext);
-  // const {categories, setCategories}= useState([])
-  //no estoy pudiendo traer las categorias
+  const { state, addProduct, getListCategories } = useContext(ProductContext);
+
   useEffect(() => {
-    // setCategories ( getListCategories());
-    
-  }, []);
+    getListCategories();
+    console.log(state.categories);
+  }, [state.isLoading]);
+
 
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
@@ -48,12 +54,14 @@ export default function ProductAdd() {
         status: "Activo",
         category: "",
         detail: "",
+        image: "",
       },
       validationSchema: schema,
 
       onSubmit: (values, { resetForm }) => {
-        console.log(values);
-        addProduct(values);
+        console.log("enviando formulario");
+        // console.log(values);
+        addProduct(values)
         resetForm();
       },
     });
@@ -76,13 +84,9 @@ export default function ProductAdd() {
             Agregar producto
           </Typography>
 
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+              {/* Nombre del producto */}
               <Grid item xs={12}>
                 <TextField
                   autoFocus
@@ -101,10 +105,10 @@ export default function ProductAdd() {
                   onChange={handleChange}
                 />
               </Grid>
+              {/* Precio */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="price"
-                  type="number"
                   required
                   fullWidth
                   id="price"
@@ -116,10 +120,10 @@ export default function ProductAdd() {
                   onChange={handleChange}
                 />
               </Grid>
+              {/* Stock */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="stock"
-                  type="number"
                   required
                   fullWidth
                   id="stock"
@@ -131,6 +135,7 @@ export default function ProductAdd() {
                   onChange={handleChange}
                 />
               </Grid>
+              {/* Categoría */}
               <Grid item xs={12} sm={6}>
                 <Box>
                   <FormControl fullWidth>
@@ -146,19 +151,16 @@ export default function ProductAdd() {
                       }}
                       required
                     >
-                      {/* {
-                        categories.map((category) => {
-                          <MenuItem key={category._id} value={category.categoryName}>
-                            {category.categoryName}
-                          </MenuItem>;
-                        })} */}
-                      <MenuItem value="1">Mujer</MenuItem>
-                      <MenuItem value="2">Hombre</MenuItem>
-                      <MenuItem value="3">Niños</MenuItem>
+                      {state.categories.map((categoria) => (
+                        <MenuItem key={categoria._id} value={categoria._id}>
+                          {categoria.categoryName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Box>
               </Grid>
+              {/* Estado */}
               <Grid item xs={12} sm={6}>
                 <Box>
                   <FormControl fullWidth>
@@ -180,6 +182,7 @@ export default function ProductAdd() {
                   </FormControl>
                 </Box>
               </Grid>
+              {/* Descripción */}
               <Grid item xs={12}>
                 <TextField
                   name="detail"
@@ -196,6 +199,7 @@ export default function ProductAdd() {
                   onChange={handleChange}
                 />
               </Grid>
+              {/* Imagen */}
               <Grid item xs={12}>
                 <TextField
                   name="image"
@@ -215,7 +219,7 @@ export default function ProductAdd() {
           <LoadingButton
             sx={{ mt: 3 }}
             size="large"
-            type="submit"
+            type="button"
             variant="contained"
             onClick={handleSubmit}
           >

@@ -6,6 +6,7 @@ import { dashAxios } from "../config/dashAxios";
 
 const initialState = {
   products: null,
+  categories:[],
   errorMessage: "",
   isLoading: true,
 };
@@ -18,32 +19,51 @@ export const ProductProvider = ({ children }) => {
   const addProduct = async (values) => {
     try {
       console.log(values)
-      // const response = await dashAxios.post("/products", {
-      //   productName: values.productName,
-      //   price: "",
-      //   stock: "",
-      //   status: "activo",
-      //   category: "",
-      //   detail: "",
-      // });
-      // if (response.status === 201) {
-      //   dispatch({
-      //     type: types.products.addProduct,
-      //     payload: values,
-      //   });
-      // }
-      // alert("Usuario creado correctamente");
+      const response = await dashAxios.post("/products", {
+        productName: values.productName,
+        price: values.price,
+        stock: values.stock,
+        status: values.status,
+        category: values.category,
+        detail: values.detail,
+        Image: values.image
+      });
+      if (response.status === 201) {
+        dispatch({
+          type: types.products.addProduct,
+          payload: {
+            products:values
+          }
+        });
+      }
+      alert("Producto creado correctamente");
     } catch (error) {
       console.log(error);
+      dispatch({
+        type: types.products.addProduct,
+        payload: {
+          errorMessage: error
+        }
+      });
     }
   };
   const getListCategories = async () => {
     try {
       const response = await dashAxios.get("/categories");
-      // console.log(response.data);
-      return response.data
+      dispatch({
+        type: types.products.getCategories,
+        payload: {
+          categories: response.data,
+        }
+      })
+      
     }catch(error){
-      console.log(error);
+      dispatch({
+        type: types.products.getCategories,
+        payload: {
+          errorMessage: error,
+        }
+      })
     }}
 
   return (
