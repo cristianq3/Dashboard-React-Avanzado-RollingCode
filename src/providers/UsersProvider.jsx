@@ -32,7 +32,7 @@ export const UsersProvider = ({ children }) => {
   const createUser = async ({firstname, lastname, email, password, role, status, image}) => {
     try {
       console.log('CONSULTA', firstname, lastname, email, password, role, status, image)
-      const { data } = await dashAxios.post("auth/new", {
+       await dashAxios.post("auth/new", {
         firstname,
         lastname,
         email,
@@ -71,9 +71,17 @@ export const UsersProvider = ({ children }) => {
     }
   };
 
-  const deleteUser = async () => {
+  const deleteUser = async (id) => {
     try {
-      const { data } = await dashAxios.delete("auth/:id");
+       await dashAxios.delete(`auth/${id}`);
+      dispatch({
+        type: types.users.deleteUser,
+        payload: {
+          ...state,
+          errorMessage: '',
+        },
+      })
+
     } catch (error) {
       console.log(error);
     }
@@ -84,7 +92,8 @@ export const UsersProvider = ({ children }) => {
       value={{
         state,
         getListUsers,
-        createUser
+        createUser,
+        deleteUser
       }}
     >
       {children}

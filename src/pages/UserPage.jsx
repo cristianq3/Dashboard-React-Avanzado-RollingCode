@@ -2,8 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
-import { useContext } from 'react';
-import { UsersContext } from '../../src/contexts/UsersContext' 
+import { useContext } from "react";
+import { UsersContext } from "../../src/contexts/UsersContext";
 // @mui
 import {
   Card,
@@ -73,19 +73,20 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) =>
+        _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 export default function UserPage() {
-  const { state, getListUsers, isLoading } = useContext(UsersContext)
+  const { state, getListUsers, isLoading, deleteUser } = useContext(UsersContext);
 
-  useEffect(() =>{ 
-    getListUsers()
-    console.log(state.users)
-  }, [])
+  useEffect(() => {
+    getListUsers();
+    console.log(state.users);
+  }, [isLoading]);
 
   const [open, setOpen] = useState(null);
 
@@ -100,7 +101,6 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -141,6 +141,15 @@ export default function UserPage() {
       );
     }
     setSelected(newSelected);
+  };
+
+  const handleDelete = (idSelected) => {
+    console.log(idSelected);
+    deleteUser(idSelected);
+  };
+
+  const handleEdit = (idSelected) => {
+    console.log(idSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -185,13 +194,14 @@ export default function UserPage() {
             Usuarios
           </Typography>
           <Button
-            variant="contained" href='/dashboard/user/new'
+            variant="contained"
+            href="/dashboard/user/new"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             Nuevo Usuario
           </Button>
         </Stack>
-        
+
         <Card>
           <UserListToolbar
             numSelected={selected.length}
@@ -215,15 +225,8 @@ export default function UserPage() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const {
-                        _id,
-                        firstname,
-                        lastname,
-                        email,
-                        role,
-                        status,
-                     
-                      } = row;
+                      const { _id, firstname, lastname, email, role, status } =
+                        row;
                       const selectedUser = selected.indexOf(firstname) !== -1;
 
                       return (
@@ -237,7 +240,9 @@ export default function UserPage() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={selectedUser}
-                              onChange={(event) => handleClick(event, firstname)}
+                              onChange={(event) =>
+                                handleClick(event, firstname)
+                              }
                             />
                           </TableCell>
 
@@ -249,7 +254,7 @@ export default function UserPage() {
                             >
                               {/* <Avatar alt={name} src={avatarUrl} /> */}
                               <Typography variant="subtitle2" noWrap>
-                                {firstname+' '+lastname}
+                                {firstname + " " + lastname}
                               </Typography>
                             </Stack>
                           </TableCell>
@@ -272,14 +277,28 @@ export default function UserPage() {
                             </Label>
                           </TableCell>
 
-                          <TableCell align="right">
-                            <IconButton
+                          <TableCell align="center">
+                            <Button
+                              variant="outlined"
+                              color="error" 
+                              onClick={() => handleDelete(_id)}
+                            >
+                              Eliminar
+                            </Button>
+
+                            <Button
+                              variant="outlined" 
+                              onClick={() => handleEdit(_id)}
+                            >
+                              Editar
+                            </Button>
+                            {/* <IconButton
                               size="large"
                               color="inherit"
                               onClick={handleOpenMenu}
                             >
                               <Iconify icon={"eva:more-vertical-fill"} />
-                            </IconButton>
+                            </IconButton> */}
                           </TableCell>
                         </TableRow>
                       );
@@ -363,8 +382,10 @@ export default function UserPage() {
           <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
           Editar
         </MenuItem>
-
-        <MenuItem sx={{ color: "error.main" }}>
+        <MenuItem
+          sx={{ color: "error.main" }}
+          onClick={(_id) => handleDelete(_id)}
+        >
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
           Borrar
         </MenuItem>
