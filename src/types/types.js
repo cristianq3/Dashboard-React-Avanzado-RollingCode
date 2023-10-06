@@ -17,5 +17,6 @@ export const types = {
         addProduct: '[PRODUCTS] - ADDPRODUCT',
         editProduct: '[PRODUCTS] - EDITPRODUCT',
         deleteProduct: '[PRODUCTS] - DELETEPRODUCT',
+        getCategories: '[PRODUCTS] - GETCATEGORIES'
     }
 }

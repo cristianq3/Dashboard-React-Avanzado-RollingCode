@@ -5,7 +5,7 @@ export const ProductReducer = (state = {}, action) => {
     case types.products.listProducts:
       return {
         ...state,
-        products: action.payload.products,
+        products: action.payload,
         errorMessage: "",
         isLoading: false,
       };
@@ -14,24 +14,30 @@ export const ProductReducer = (state = {}, action) => {
       return {
         ...state,
         products: action.payload.products,
-        errorMessage: "",
+        errorMessage: action.payload.errorMessage,
         isLoading: false,
       };
 
     case types.products.deleteProduct:
       return {
         ...state,
-        products: action.payload.products,
+        products: action.payload,
         errorMessage: "",
         isLoading: false,
       };
     case types.products.editProduct:
       return {
         ...state,
-        products: action.payload.products,
+        products: action.payload,
         errorMessage: "",
         isLoading: false,
       };
+      case types.products.getCategories:
+        return {
+          ...state,
+          categories: action.payload.categories,
+          isLoading: false,
+        }
 
     default:
       return state;
