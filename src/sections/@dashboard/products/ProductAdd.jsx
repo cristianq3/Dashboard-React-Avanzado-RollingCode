@@ -152,7 +152,7 @@ export default function ProductAdd() {
                       required
                     >
                       {state.categories.map((categoria) => (
-                        <MenuItem key={categoria._id} value={categoria._id}>
+                        <MenuItem key={categoria._id} value={categoria.categoryName}>
                           {categoria.categoryName}
                         </MenuItem>
                       ))}
