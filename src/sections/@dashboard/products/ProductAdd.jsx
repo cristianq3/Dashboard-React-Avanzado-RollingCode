@@ -23,17 +23,11 @@ import { ProductContext } from "../../../contexts/ProductContext";
 // ----------------------------------------------------------------------
 
 const schema = Yup.object().shape({
-  productName: Yup.string().required(
-    "Debes ingresar un nombre"
-  ),
+  productName: Yup.string().required("Debes ingresar un nombre"),
   price: Yup.string().required("Debes ingresar el precio"),
   stock: Yup.string().required("Debes ingresar el stock"),
-  category: Yup.string().required(
-    "Debes seleccionar una categoría"
-  ),
-  detail: Yup.string().required(
-    "Debes ingresar una descripción "
-  ),
+  category: Yup.string().required("Debes seleccionar una categoría"),
+  detail: Yup.string().required("Debes ingresar una descripción "),
 });
 
 export default function ProductAdd() {
