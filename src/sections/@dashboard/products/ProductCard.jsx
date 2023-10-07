@@ -25,8 +25,8 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
-
+  const { productName: name, cover, price, status, priceSale } = product;
+  const colors = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>

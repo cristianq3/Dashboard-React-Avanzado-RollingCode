@@ -1,7 +1,11 @@
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 // @mui
-import { Container, Stack, Typography } from "@mui/material";
+import { Container, Stack, Typography, Button } from "@mui/material";
+
+// @mui iconos
+import Iconify from "../components/iconify";
+
 // components
 import {
   ProductSort,
@@ -9,13 +13,22 @@ import {
   ProductCartWidget,
   ProductFilterSidebar,
 } from "../sections/@dashboard/products";
+// context
+import { ProductContext } from "../contexts/ProductContext";
 // mock
-import PRODUCTS from "../_mock/products";
+//import PRODUCTS from "../_mock/products";
+//import { Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
+  const { state, getListProducts } = useContext(ProductContext);
+
+  useEffect(() => {
+    getListProducts();
+    console.log(state.products);
+  }, [state.isLoading]);
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -28,14 +41,20 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Productos | Minimal UI </title>
+        <title> Productos </title>
       </Helmet>
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Productos
         </Typography>
-
+        <Button
+          variant="contained"
+          startIcon={<Iconify icon="eva:plus-fill" />}
+          href="/dashboard/addproduct"
+        >
+          Nuevo Producto
+        </Button>
         <Stack
           direction="row"
           flexWrap="wrap-reverse"
@@ -52,8 +71,7 @@ export default function ProductsPage() {
             <ProductSort />
           </Stack>
         </Stack>
-
-        <ProductList products={PRODUCTS} />
+        {state.products && <ProductList products={state.products} />}
         <ProductCartWidget />
       </Container>
     </>
