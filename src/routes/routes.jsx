@@ -15,15 +15,16 @@ import RegisterPage from "../pages/RegisterPage";
 import AuthLayout from "../layouts/authuser/AuthLayout";
 import { Loading } from "../components/loading/Loading";
 import ProductAdd from "../sections/@dashboard/products/ProductAdd";
+import SalesPage from "../pages/SalesPage";
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   const { checkAuthToken, state } = useContext(AuthContext);
-  
-   useEffect(() =>{
-    checkAuthToken()
-   }, [])
+
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
 
   const routes = useRoutes([
     {
@@ -31,20 +32,21 @@ export default function Router() {
       element: state.isLogged ? (
         <DashboardLayout />
       ) : (
-        <Navigate to="/auth/login"/>
-        ),
+        <Navigate to="/auth/login" />
+      ),
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
         { path: "user", element: <UserPage /> },
         { path: "products", element: <ProductsPage /> },
+        { path: "sales", element: <SalesPage /> },
         { path: "addproduct", element: <ProductAdd /> },
         { path: "blog", element: <BlogPage /> },
       ],
     },
     {
       path: "/auth",
-      element: !state.isLogged ? (<AuthLayout />) : (<Navigate to="/dashboard"/>),
+      element: !state.isLogged ? <AuthLayout /> : <Navigate to="/dashboard" />,
       children: [
         { element: <Navigate to="/auth/login" />, index: true },
         { path: "login", element: <LoginPage /> },
