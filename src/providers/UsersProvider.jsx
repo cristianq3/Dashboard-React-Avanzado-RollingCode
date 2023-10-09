@@ -63,9 +63,16 @@ export const UsersProvider = ({ children }) => {
     }
   };
 
-  const editUser = async () => {
+  const editUser = async ({firstname, lastname, email, password, role, status, image, id}) => {
     try {
-      const { data } = await dashAxios.put("auth/:id");
+      const { data } = await dashAxios.put(`auth/${id}`);
+      dispatch({
+        type: types.users.editUser,
+        payload: {
+          ...state,
+          errorMessage: '',
+        },
+      })
     } catch (error) {
       console.log(error);
     }
@@ -93,7 +100,8 @@ export const UsersProvider = ({ children }) => {
         state,
         getListUsers,
         createUser,
-        deleteUser
+        deleteUser,
+        editUser
       }}
     >
       {children}

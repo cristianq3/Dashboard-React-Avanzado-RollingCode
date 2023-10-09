@@ -18,19 +18,48 @@ import Avatar from "@mui/material/Avatar";
 import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
 import { LoadingButton } from "@mui/lab";
 import { UsersContext } from "../../../contexts/UsersContext";
+import { VALID_PASSWORD_REGEX } from "../../../helpers/regExp";
+import { useParams } from "react-router-dom";
 
 //TODO: cambiar validaciones y corregir Name por name
 const schema = Yup.object().shape({
-  firstName: Yup.string().required("Debes ingresar el nombre del usuario"),
-  lastName: Yup.string().required("Debes ingresar el apellido del usuario"),
-  email: Yup.string().required("Debes ingresar un correo electrónico"),
-  password: Yup.string().required("Debes ingresar una contraseña"),
-  role: Yup.string().required("Debes seleccionar un Rol"),
-  status: Yup.string().required("Debe seleccionar un Estado")
+
+  firstname: Yup.string()
+  .min(3, 'El nombre debe tener al menos 3 caracteres')
+  .max(30, 'El nombre no debe superar los 30 caracteres')
+  .required("Debes ingresar el nombre del usuario"),
+  
+  lastname: Yup.string()
+  .min(3, 'El apellido debe tener al menos 3 caracteres')
+  .max(40, 'El apellido no debe superar los 40 caracteres')
+  .required("Debes ingresar el apellido del usuario"),
+  
+  email: Yup.string()
+  .min(5, 'El email debe tener al menos 5 caracteres')
+  .max(80, 'El email no debe superar los 60 caracteres')
+  .email()
+  .required("Debes ingresar un correo electrónico"),
+  
+  password: Yup.string()
+  .min(8, 'La contraseña debe tener al menos 8 caracteres')
+  .max(16, 'La contraseña no debe superar los 16 caracteres')
+  .required('Debes ingresar una constraseña')
+  .matches(VALID_PASSWORD_REGEX,
+    'La contraseña debe tener como mìnimo 8 caracteres , al menos un número, una minúscula, una mayúscula y no contener caracteres especiales.',
+),
+  
+  role: Yup.string()
+  .required("Debes seleccionar un Rol"),
+  
+  status: Yup.string()
+  .required("Debe seleccionar un Estado")
 });
 
 export default function EditUserForm() {
-  const { getListUsers  } = useContext(UsersContext);
+  const { editUser  } = useContext(UsersContext);
+  const {id} = useParams()
+  console.log(id)
+
   // const {categories, setCategories}= useState([])
   //no estoy pudiendo traer las categorias
   useEffect(() => {
@@ -86,32 +115,32 @@ export default function EditUserForm() {
             <Grid item xs={12} sm={6}>
                 <TextField
                   autoFocus
-                  name="firstName"
+                  name="firstname"
                   type="text"
                   required
                   fullWidth
-                  id="firstName"
+                  id="firstname"
                   label="Nombre/s"
                   autoComplete="off"
-                  value={values.firstName}
-                  error={touched.firstName && errors.firstName ? true : false}
-                  helperText={touched.firstName && errors.firstName}
+                  value={values.firstname}
+                  error={touched.firstname && errors.firstname ? true : false}
+                  helperText={touched.firstname && errors.firstname}
                   onChange={handleChange}
                 />
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <TextField
-                  name="lastName"
+                  name="lastname"
                   type="text"
                   required
                   fullWidth
-                  id="lastName"
+                  id="lastname"
                   label="Apellido/s"
                   autoComplete="off"
-                  value={values.lastName}
-                  error={touched.lastName && errors.lastName ? true : false}
-                  helperText={touched.lastName && errors.lastName}
+                  value={values.lastname}
+                  error={touched.lastname && errors.lastname ? true : false}
+                  helperText={touched.lastname && errors.lastname}
                   onChange={handleChange}
                 />
               </Grid>
@@ -222,6 +251,7 @@ export default function EditUserForm() {
 
             </Grid>
           </Box>
+
           <LoadingButton
             sx={{ mt: 3 }}
             size="large"
@@ -229,7 +259,7 @@ export default function EditUserForm() {
             variant="contained"
             onClick={handleSubmit}
           >
-            Agregar
+            Editar
           </LoadingButton>
         </Box>
       </Container>

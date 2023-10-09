@@ -4,6 +4,8 @@ import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UsersContext } from "../../src/contexts/UsersContext";
+import Swal from 'sweetalert2'
+import { Link } from "react-router-dom";
 // @mui
 import {
   Card,
@@ -82,11 +84,13 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const { state, getListUsers, isLoading, deleteUser } = useContext(UsersContext);
+  const [userDeleted, setUserDeleted] = useState(false)
 
   useEffect(() => {
     getListUsers();
+    setUserDeleted(false);
     console.log(state.users);
-  }, [isLoading]);
+  }, [isLoading, userDeleted]);
 
   const [open, setOpen] = useState(null);
 
@@ -101,6 +105,7 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -145,7 +150,28 @@ export default function UserPage() {
 
   const handleDelete = (idSelected) => {
     console.log(idSelected);
-    deleteUser(idSelected);
+    // deleteUser(idSelected);
+    Swal.fire({
+      title: `¿Seguro que deseas eliminar el usuario?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#76B0F1",
+      cancelButtonColor: "#B72136",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteUser(idSelected);
+        setUserDeleted(true)
+        Swal.fire({
+          text: `Se eliminó el usuario correctamente`,
+          icon: "success",
+          timer: 1700,
+          showConfirmButton: false,
+        });
+      }
+    });
+
   };
 
   const handleEdit = (idSelected) => {
@@ -288,7 +314,7 @@ export default function UserPage() {
 
                             <Button
                               variant="outlined" 
-                              onClick={() => handleEdit(_id)}
+                              as={Link} to={`edit/${_id}`}
                             >
                               Editar
                             </Button>

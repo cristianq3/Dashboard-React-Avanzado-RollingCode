@@ -41,7 +41,7 @@ export default function Router() {
         { path: "app", element: <DashboardAppPage /> },
         { path: "user", element: <UserPage /> },
         { path: "user/new", element: <CreateUserForm /> },
-        { path: 'user/edit', element: <EditUserForm/>},
+        { path: 'user/edit/:id', element: <EditUserForm/>},
         { path: "products", element: <ProductsPage /> },
         { path: "addproduct", element: <ProductAdd /> },
         { path: "blog", element: <BlogPage /> },
