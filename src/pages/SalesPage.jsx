@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { faker } from "@faker-js/faker/locale/es";
 // @mui
 import { useTheme } from "@mui/material/styles";
-import { Grid, Container, Typography, Card, CardHeader } from "@mui/material";
+import { Grid, Container, Typography } from "@mui/material";
 // sections
 import {
   AppOrderTimeline,
@@ -10,55 +10,130 @@ import {
   AppWebsiteVisits,
   AppConversionRates,
 } from "../sections/@dashboard/app";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { DataGrid, esES } from "@mui/x-data-grid";
 
-function createData(name, calories, fat, carbs) {
-  return { name, calories, fat, carbs };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24),
-  createData("Ice cream sandwich", 237, 9.0, 37),
-  createData("Eclair", 262, 16.0, 24),
-  createData("Cupcake", 305, 3.7, 67),
-  createData("Gingerbread", 356, 16.0, 49),
+const columns = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: 100,
+  },
+  {
+    field: "productos",
+    headerName: "Productos",
+    width: 200,
+  },
+  {
+    field: "comprador",
+    headerName: "Comprador",
+    width: 160,
+  },
+  {
+    field: "valor",
+    headerName: "Valor",
+    type: "number",
+    width: 130,
+    sortable: false,
+    headerAlign: "left",
+  },
+  {
+    field: "fecha",
+    headerName: "Fecha",
+    width: 160,
+  },
 ];
 
-function SalesTable() {
+const rows = [
+  {
+    id: 1,
+    comprador: "Snow",
+    productos: "Jon",
+    valor: 35,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 2,
+    comprador: "Lannister",
+    productos: "Cersei",
+    valor: 42,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 3,
+    comprador: "Lannister",
+    productos: "Jaime",
+    valor: 45,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 4,
+    comprador: "Stark",
+    productos: "Arya",
+    valor: 16,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 5,
+    comprador: "Targaryen",
+    productos: "Daenerys",
+    valor: 100,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 6,
+    comprador: "Melisandre",
+    productos: null,
+    valor: 150,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 7,
+    comprador: "Clifford",
+    productos: "Ferrara",
+    valor: 44,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 8,
+    comprador: "Frances",
+    productos: "Rossini",
+    valor: 36,
+    fecha: "12/10/2023",
+  },
+  {
+    id: 9,
+    comprador: "Roxie",
+    productos: "Harvey",
+    valor: 65,
+    fecha: "12/10/2023",
+  },
+];
+
+const rowsWithPrice = rows.map((row) => ({
+  ...row,
+  valor: new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+  }).format(row.valor),
+}));
+
+function DataTable() {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="sales table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Productos</TableCell>
-            <TableCell align="right">Comprador</TableCell>
-            <TableCell align="right">Valor Total</TableCell>
-            <TableCell align="right">Fecha</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div style={{ height: 400, width: "100%" }}>
+      <Container>
+        <DataGrid
+          rows={rowsWithPrice}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+        />
+      </Container>
+    </div>
   );
 }
 
@@ -80,11 +155,9 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Card>
-              <CardHeader title="Ultimas ventas" sx={{ pb: 1 }} />
-              <SalesTable />
-            </Card>
+            <DataTable />
           </Grid>
+
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Ventas por día"
