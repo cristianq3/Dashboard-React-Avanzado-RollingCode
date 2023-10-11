@@ -56,34 +56,41 @@ const schema = Yup.object().shape({
 });
 
 export default function EditUserForm() {
-  const { getUser, isLoadingUserSelected, state } = useContext(UsersContext);
+  const { getUser, userSelected, isLoadingUserSelected } = useContext(UsersContext);
   const {id} = useParams()
-
-  useEffect(() => {
-    getUser(id)
-    console.log('userSelected', state.userSelected)
-    console.log('Values', values)
-  }, [isLoadingUserSelected]);
-
-  const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
+  
+  const { handleChange, handleSubmit, errors, values, setFieldValue, touched, setValues } =
     useFormik({
       initialValues: {
-        email: state.userSelected.email,
-        firstname: state.userSelected.firstname,
-        lastname: state.userSelected.lastname,
-        status: state.userSelected.status,
-        role: state.userSelected.role,
-        password: state.userSelected.password,
+        email: '',
+        firstname: '',
+        lastname: '',
+        status: '',
+        role: '',
       },
+      enableReinitialize: true,
       validationSchema: schema,
       onSubmit: (values, { resetForm }) => {
         console.log(values);
-        addProduct(values);
+        //addProduct(values);
         resetForm();
       },
     });
 
-
+    useEffect(() => {
+      getUser(id)
+    }, [isLoadingUserSelected]);
+   
+    useEffect(() => {
+      getUser(id)
+      setValues({
+        email: userSelected.email,
+        firstname: userSelected.firstname,
+        lastname: userSelected.lastname,
+        status: userSelected.status,
+        role: userSelected.role,
+      })
+    }, [userSelected]);
 
   return (
     <>
@@ -121,7 +128,7 @@ export default function EditUserForm() {
                   id="firstname"
                   label="Nombre/s"
                   autoComplete="off"
-                  value={values.firstname}
+                  value={values.firstname || ''}
                   error={touched.firstname && errors.firstname ? true : false}
                   helperText={touched.firstname && errors.firstname}
                   onChange={handleChange}
@@ -137,7 +144,7 @@ export default function EditUserForm() {
                   id="lastname"
                   label="Apellido/s"
                   autoComplete="off"
-                  value={state.userSelected.lastname}
+                  value={values.lastname || ''}
                   error={touched.lastname && errors.lastname ? true : false}
                   helperText={touched.lastname && errors.lastname}
                   onChange={handleChange}
@@ -153,7 +160,7 @@ export default function EditUserForm() {
                   id="email"
                   label="Correo electrónico"
                   autoComplete="off"
-                  value={values.email}
+                  value={values.email || ''}
                   error={
                     touched.email && errors.email ? true : false
                   }
@@ -161,7 +168,7 @@ export default function EditUserForm() {
                   onChange={handleChange}
                 />
               </Grid>
-             
+              
               {/* <Grid item xs={12}>
                 <TextField
                   name="password"
@@ -171,7 +178,7 @@ export default function EditUserForm() {
                   id="password"
                   label="Contraseña"
                   autoComplete="off"
-                  value={values.password}
+                  value={values.password || ''}
                   error={touched.password && errors.password ? true : false}
                   helperText={touched.password && errors.password}
                   onChange={handleChange}
@@ -186,19 +193,13 @@ export default function EditUserForm() {
                       name="role"
                       labelId="role"
                       id="role"
-                      value={state.userSelected.role}
+                      value={values.role || ''}
                       label="Rol"
                       onChange={(e) => {
                         setFieldValue("role", e.target.value);
                       }}
                       required
                     >
-                      {/* {
-                        categories.map((category) => {
-                          <MenuItem key={category._id} value={category.categoryName}>
-                            {category.categoryName}
-                          </MenuItem>;
-                        })} */}
                       <MenuItem value="Administrador">Administrador</MenuItem>
                       <MenuItem value="Cliente">Cliente</MenuItem>
                     </Select>
@@ -213,19 +214,14 @@ export default function EditUserForm() {
                       name="status"
                       labelId="status"
                       id="status"
-                      value={state.userSelected.status}
+                      value={values.status || ''}
                       label="Estado"
                       onChange={(e) => {
                         setFieldValue("status", e.target.value);
                       }}
                       required
                     >
-                      {/* {
-                        categories.map((category) => {
-                          <MenuItem key={category._id} value={category.categoryName}>
-                            {category.categoryName}
-                          </MenuItem>;
-                        })} */}
+                      
                       <MenuItem value="Activo">Activo</MenuItem>
                       <MenuItem value="Inactivo">Inactivo</MenuItem>
                     </Select>

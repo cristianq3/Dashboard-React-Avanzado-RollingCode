@@ -34,12 +34,12 @@ export const UsersProvider = ({ children }) => {
   const getUser = async (id) => {
     try {
       const  {data}  = await dashAxios.get(`auth/${id}`)
-      console.log('data', data)
       dispatch({
         type: types.users.getUser,
         payload: {
             ...state,
           userSelected: data,
+          isLoadingUserSelected: false
         },
         
       });
@@ -117,11 +117,12 @@ export const UsersProvider = ({ children }) => {
     <UsersContext.Provider
       value={{
         state,
+        ...state,
         getListUsers,
         getUser,
         createUser,
         deleteUser,
-        editUser
+        editUser,
       }}
     >
       {children}
