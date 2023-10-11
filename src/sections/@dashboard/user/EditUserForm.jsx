@@ -56,35 +56,34 @@ const schema = Yup.object().shape({
 });
 
 export default function EditUserForm() {
-  const { editUser  } = useContext(UsersContext);
+  const { getUser, isLoadingUserSelected, state } = useContext(UsersContext);
   const {id} = useParams()
-  console.log(id)
 
-  // const {categories, setCategories}= useState([])
-  //no estoy pudiendo traer las categorias
   useEffect(() => {
-    // setCategories ( getListCategories());
-    
-  }, []);
+    getUser(id)
+    console.log('userSelected', state.userSelected)
+    console.log('Values', values)
+  }, [isLoadingUserSelected]);
 
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
-        email: "",
-        firstName: "",
-        lastName: "",
-        status: "Activo",
-        role: "",
-        password: "",
+        email: state.userSelected.email,
+        firstname: state.userSelected.firstname,
+        lastname: state.userSelected.lastname,
+        status: state.userSelected.status,
+        role: state.userSelected.role,
+        password: state.userSelected.password,
       },
       validationSchema: schema,
-
       onSubmit: (values, { resetForm }) => {
         console.log(values);
         addProduct(values);
         resetForm();
       },
     });
+
+
 
   return (
     <>
@@ -138,7 +137,7 @@ export default function EditUserForm() {
                   id="lastname"
                   label="Apellido/s"
                   autoComplete="off"
-                  value={values.lastname}
+                  value={state.userSelected.lastname}
                   error={touched.lastname && errors.lastname ? true : false}
                   helperText={touched.lastname && errors.lastname}
                   onChange={handleChange}
@@ -163,7 +162,7 @@ export default function EditUserForm() {
                 />
               </Grid>
              
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   name="password"
                   type="text"
@@ -177,7 +176,7 @@ export default function EditUserForm() {
                   helperText={touched.password && errors.password}
                   onChange={handleChange}
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} sm={6}>
                 <Box>
@@ -187,7 +186,7 @@ export default function EditUserForm() {
                       name="role"
                       labelId="role"
                       id="role"
-                      value={values.role}
+                      value={state.userSelected.role}
                       label="Rol"
                       onChange={(e) => {
                         setFieldValue("role", e.target.value);
@@ -214,7 +213,7 @@ export default function EditUserForm() {
                       name="status"
                       labelId="status"
                       id="status"
-                      value={values.status}
+                      value={state.userSelected.status}
                       label="Estado"
                       onChange={(e) => {
                         setFieldValue("status", e.target.value);
@@ -234,7 +233,7 @@ export default function EditUserForm() {
                 </Box>
               </Grid>
            
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   name="image"
                   type="file"
@@ -242,12 +241,12 @@ export default function EditUserForm() {
                   fullWidth
                   id="image"
                   autoComplete="off"
-                  value={values.image}
+                  value={state.userSelected.avatar}
                   error={touched.image && errors.image ? true : false}
                   helperText={touched.image && errors.image}
                   onChange={handleChange}
                 />
-              </Grid>
+              </Grid> */}
 
             </Grid>
           </Box>

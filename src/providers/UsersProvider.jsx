@@ -6,8 +6,10 @@ import { UsersReducer } from "../reducers/UsersReducer";
 
 const initialState = {
   users: [],
+  userSelected: {},
   errorMessage: "",
   isLoading: true,
+  isLoadingUserSelected: true
 };
 
 export const UsersProvider = ({ children }) => {
@@ -28,6 +30,23 @@ export const UsersProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+  const getUser = async (id) => {
+    try {
+      const  {data}  = await dashAxios.get(`auth/${id}`)
+      console.log('data', data)
+      dispatch({
+        type: types.users.getUser,
+        payload: {
+            ...state,
+          userSelected: data,
+        },
+        
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  } 
 
   const createUser = async ({firstname, lastname, email, password, role, status, image}) => {
     try {
@@ -99,6 +118,7 @@ export const UsersProvider = ({ children }) => {
       value={{
         state,
         getListUsers,
+        getUser,
         createUser,
         deleteUser,
         editUser

@@ -31,9 +31,15 @@ export const UsersReducer = (state={}, action) => {
                 users: action.payload.users,
                 errorMessage: "",
                 isLoading: false,
-            } 
-        
-        //TODO: getUser y changePassword
+            }; 
+        case types.users.getUser:
+            return {
+                ...state,
+                userSelected: action.payload.userSelected,
+                errorMessage: "",
+                isLoadingUserSelected: false
+            }
+        //TODO:  y changePassword
 
         default:
             return state;

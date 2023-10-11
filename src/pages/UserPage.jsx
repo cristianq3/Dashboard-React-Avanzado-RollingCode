@@ -88,9 +88,13 @@ export default function UserPage() {
 
   useEffect(() => {
     getListUsers();
-    setUserDeleted(false);
     console.log(state.users);
-  }, [isLoading, userDeleted]);
+  }, [isLoading]);
+
+  useEffect(() => {
+    setUserDeleted(false);
+    console.log(state.users)
+  }, [userDeleted])
 
   const [open, setOpen] = useState(null);
 
@@ -314,7 +318,7 @@ export default function UserPage() {
 
                             <Button
                               variant="outlined" 
-                              as={Link} to={`edit/${_id}`}
+                              component={Link} to={`edit/${_id}`}
                             >
                               Editar
                             </Button>
