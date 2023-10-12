@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useFormik } from "formik";
+import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 
 // @mui
@@ -28,6 +28,7 @@ const schema = Yup.object().shape({
   stock: Yup.string().required("Debes ingresar el stock"),
   category: Yup.string().required("Debes seleccionar una categoría"),
   detail: Yup.string().required("Debes ingresar una descripción "),
+  image: Yup.mixed().required('Debes seleccionar una imagen'),
 });
 
 export default function ProductAdd() {
@@ -37,7 +38,6 @@ export default function ProductAdd() {
     getListCategories();
     console.log(state.categories);
   }, [state.isLoading]);
-
 
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
@@ -55,7 +55,7 @@ export default function ProductAdd() {
       onSubmit: (values, { resetForm }) => {
         console.log("enviando formulario");
         // console.log(values);
-        addProduct(values)
+        addProduct(values);
         resetForm();
       },
     });
@@ -146,7 +146,10 @@ export default function ProductAdd() {
                       required
                     >
                       {state.categories.map((categoria) => (
-                        <MenuItem key={categoria._id} value={categoria.categoryName}>
+                        <MenuItem
+                          key={categoria._id}
+                          value={categoria.categoryName}
+                        >
                           {categoria.categoryName}
                         </MenuItem>
                       ))}
