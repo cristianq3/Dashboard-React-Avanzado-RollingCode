@@ -48,13 +48,14 @@ export default function ProductAdd() {
         status: "Activo",
         category: "",
         detail: "",
-        image: "",
+        image: {},
       },
       validationSchema: schema,
+      
 
       onSubmit: (values, { resetForm }) => {
         console.log("enviando formulario");
-        // console.log(values);
+        console.log(values);
         addProduct(values);
         resetForm();
       },
@@ -201,14 +202,17 @@ export default function ProductAdd() {
                 <TextField
                   name="image"
                   type="file"
+                  accept="image/*"
                   required
                   fullWidth
                   id="image"
                   autoComplete="off"
-                  value={values.image}
+                  // value={values.image}
                   error={touched.image && errors.image ? true : false}
                   helperText={touched.image && errors.image}
-                  onChange={handleChange}
+                  onChange={(event) => {
+                    setFieldValue('image', event.target.files[0]);
+                  }}
                 />
               </Grid>
             </Grid>

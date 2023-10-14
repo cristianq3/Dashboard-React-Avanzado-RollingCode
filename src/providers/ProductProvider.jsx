@@ -17,7 +17,7 @@ export const ProductProvider = ({ children }) => {
   
   
   const addProduct = async (values) => {
-    console.log(values)
+    console.log(values.image)
     const formData = new FormData();
     formData.append('productName', values.productName);
     formData.append('price', values.price);
@@ -29,16 +29,21 @@ export const ProductProvider = ({ children }) => {
 console.log(formData);
     try {
       
-      const response = await dashAxios.post("/products", formData);
-      if (response.status === 201) {
-        dispatch({
-          type: types.products.addProduct,
-          payload: {
-            // products: values,
-            isLoading: false  
-          }
-        });
-      }
+      const response = await dashAxios.post("/products", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', 
+        },
+      });
+      console.log(response);
+      // if (response.status === 201) {
+      //   dispatch({
+      //     type: types.products.addProduct,
+      //     payload: {
+      //       products: formData,
+      //       isLoading: false  
+      //     }
+      //   });
+      // }
       alert("Producto creado correctamente");
     } catch (error) {
       console.log(error);

@@ -25,7 +25,9 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { productName: name, cover, price, status, priceSale, detail } = product;
+  const { productName: name,  price, status, priceSale } = product;
+
+  // si le agregamos el campo colors a la base de datos tenemos que reemplazar este array por ese campo
   const colors = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
   return (
     <Card>
@@ -45,13 +47,14 @@ export default function ShopProductCard({ product }) {
             {status}
           </Label>
         )}
-        <StyledProductImg alt={name} src={cover} />
+        {/* en la src tendríamos que poner una imagen por default cuado el producto no tenga imagen */}
+        <StyledProductImg alt={name} src={product.image?product.image.secure_url:"https://pics.filmaffinity.com/strays-958875182-large.jpg"} /> 
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link color="inherit" underline="hover">
           <Typography variant="subtitle2" noWrap>
-            {detail}
+            {name}
           </Typography>
         </Link>
 
