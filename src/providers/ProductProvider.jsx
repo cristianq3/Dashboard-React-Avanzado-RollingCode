@@ -35,15 +35,15 @@ console.log(formData);
         },
       });
       console.log(response);
-      // if (response.status === 201) {
-      //   dispatch({
-      //     type: types.products.addProduct,
-      //     payload: {
-      //       products: formData,
-      //       isLoading: false  
-      //     }
-      //   });
-      // }
+      if (response.status === 201) {
+        dispatch({
+          type: types.products.addProduct,
+          payload: {
+            products: formData,
+            isLoading: false  
+          }
+        });
+      }
       alert("Producto creado correctamente");
     } catch (error) {
       console.log(error);

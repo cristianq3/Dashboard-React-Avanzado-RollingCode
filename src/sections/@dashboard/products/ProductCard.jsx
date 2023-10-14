@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+//import imageDefault from "../../../../public/assets/images/imageDefault.jpg"
 // @mui
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -35,7 +36,7 @@ export default function ShopProductCard({ product }) {
         {status && (
           <Label
             variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
+            color={(status === 'Inactivo' && 'error') || 'info'}
             sx={{
               zIndex: 9,
               top: 16,
@@ -48,7 +49,7 @@ export default function ShopProductCard({ product }) {
           </Label>
         )}
         {/* en la src tendríamos que poner una imagen por default cuado el producto no tenga imagen */}
-        <StyledProductImg alt={name} src={product.image?product.image.secure_url:"https://pics.filmaffinity.com/strays-958875182-large.jpg"} /> 
+        <StyledProductImg alt={name} src={product.image?product.image.secure_url:"/assets/images/imageDefault.jpg"} /> 
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
