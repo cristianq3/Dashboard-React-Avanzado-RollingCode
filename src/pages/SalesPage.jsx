@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { faker } from "@faker-js/faker/locale/es";
 // @mui
 import { useTheme } from "@mui/material/styles";
-import { Grid, Container, Typography } from "@mui/material";
+import { Grid, Container, Typography, Modal, Box, Button } from "@mui/material";
 // sections
 import {
   AppOrderTimeline,
@@ -11,136 +11,22 @@ import {
   AppConversionRates,
 } from "../sections/@dashboard/app";
 import { DataGrid, esES } from "@mui/x-data-grid";
-
-const columns = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 100,
-  },
-  {
-    field: "productos",
-    headerName: "Productos",
-    width: 200,
-  },
-  {
-    field: "comprador",
-    headerName: "Comprador",
-    width: 160,
-  },
-  {
-    field: "valor",
-    headerName: "Valor",
-    type: "number",
-    width: 130,
-    sortable: false,
-    headerAlign: "left",
-  },
-  {
-    field: "fecha",
-    headerName: "Fecha",
-    width: 160,
-  },
-];
-
-const rows = [
-  {
-    id: 1,
-    comprador: "Snow",
-    productos: "Jon",
-    valor: 35,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 2,
-    comprador: "Lannister",
-    productos: "Cersei",
-    valor: 42,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 3,
-    comprador: "Lannister",
-    productos: "Jaime",
-    valor: 45,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 4,
-    comprador: "Stark",
-    productos: "Arya",
-    valor: 16,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 5,
-    comprador: "Targaryen",
-    productos: "Daenerys",
-    valor: 100,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 6,
-    comprador: "Melisandre",
-    productos: null,
-    valor: 150,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 7,
-    comprador: "Clifford",
-    productos: "Ferrara",
-    valor: 44,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 8,
-    comprador: "Frances",
-    productos: "Rossini",
-    valor: 36,
-    fecha: "12/10/2023",
-  },
-  {
-    id: 9,
-    comprador: "Roxie",
-    productos: "Harvey",
-    valor: 65,
-    fecha: "12/10/2023",
-  },
-];
-
-const rowsWithPrice = rows.map((row) => ({
-  ...row,
-  valor: new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-  }).format(row.valor),
-}));
-
-function DataTable() {
-  return (
-    <div style={{ height: 400, width: "100%" }}>
-      <Container>
-        <DataGrid
-          rows={rowsWithPrice}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-        />
-      </Container>
-    </div>
-  );
-}
+import { SalesContext } from "../contexts/SalesContext";
+import { useContext, useEffect, useState } from "react";
+import { fDate } from "../utils/formatTime";
+import Carousel from "../components/carousel/Carousel";
 
 // ----------------------------------------------------------------------
 
-export default function DashboardAppPage() {
+export default function SalesPage() {
   const theme = useTheme();
+
+  const { state, getSales } = useContext(SalesContext);
+
+  useEffect(() => {
+    getSales();
+    console.log(state.sales);
+  }, [state.isLoading]);
 
   return (
     <>
@@ -155,7 +41,7 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <DataTable />
+            <DataTable sales={state.sales} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
@@ -257,5 +143,107 @@ export default function DashboardAppPage() {
         </Grid>
       </Container>
     </>
+  );
+}
+
+const columns = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: 200,
+  },
+  {
+    field: "fecha",
+    headerName: "Fecha",
+    width: 160,
+  },
+  {
+    field: "comprador",
+    headerName: "Comprador",
+    width: 160,
+  },
+  {
+    field: "valor",
+    headerName: "Valor",
+    type: "number",
+    width: 130,
+    sortable: false,
+    headerAlign: "left",
+    align: "left",
+  },
+
+  {
+    field: "productos",
+    headerName: "Productos",
+    renderCell: (products) => <BasicModal products={products.value} />,
+    sortable: false,
+    width: 160,
+  },
+];
+
+const BasicModal = ({ products }) => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 600,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  return (
+    <div>
+      <Button onClick={handleOpen}>Ver productos</Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Carousel products={products} />
+        </Box>
+      </Modal>
+    </div>
+  );
+};
+
+function DataTable({ sales }) {
+  const rowsWithFormat = sales.map((sale) => ({
+    id: sale._id,
+    comprador: `${sale.user.firstname} ${sale.user.lastname}`,
+    productos: sale.cartProducts,
+    valor: new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+    }).format(sale.totalPrice),
+    fecha: fDate(sale.saleDate, "dd MMMM yyyy"),
+  }));
+
+  return (
+    <div style={{ height: 400, width: "100%" }}>
+      <Container>
+        <DataGrid
+          rows={rowsWithFormat}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          column
+          pageSizeOptions={[5, 10]}
+          rowSelection={false}
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+        />
+      </Container>
+    </div>
   );
 }

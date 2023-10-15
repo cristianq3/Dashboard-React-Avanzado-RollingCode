@@ -10,5 +10,8 @@ export const types = {
         editProduct: '[PRODUCTS] - EDITPRODUCT',
         deleteProduct: '[PRODUCTS] - DELETEPRODUCT',
         getCategories: '[PRODUCTS] - GETCATEGORIES'
+    },
+    sales: {
+        listSales: "[SALES] - LISTSALES"
     }
 }
