@@ -11,22 +11,26 @@ import {
   AppConversionRates,
 } from "../sections/@dashboard/app";
 import { DataGrid, esES } from "@mui/x-data-grid";
-import { SalesContext } from "../contexts/SalesContext";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { fDate } from "../utils/formatTime";
 import Carousel from "../components/carousel/Carousel";
+import useSWR from "swr";
+import { dashAxios } from "../config/dashAxios";
 
 // ----------------------------------------------------------------------
+
+const fetcher = () => dashAxios.get("/sales").then((res) => res.data);
 
 export default function SalesPage() {
   const theme = useTheme();
 
-  const { state, getSales } = useContext(SalesContext);
-
-  useEffect(() => {
-    getSales();
-    console.log(state.sales);
-  }, [state.isLoading]);
+  const {
+    data: state,
+    error,
+    isLoading,
+  } = useSWR(import.meta.env.VITE_API_BACKEND, fetcher, {
+    refreshInterval: 1000,
+  });
 
   return (
     <>
@@ -41,7 +45,7 @@ export default function SalesPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <DataTable sales={state.sales} />
+            <DataTable sales={isLoading ? [] : state} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
