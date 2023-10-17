@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+//import imageDefault from "../../../../public/assets/images/imageDefault.jpg"
 // @mui
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -25,15 +26,17 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { productName: name,  price, status, priceSale } = product;
 
+  // si le agregamos el campo colors a la base de datos tenemos que reemplazar este array por ese campo
+  const colors = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
         {status && (
           <Label
             variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
+            color={(status === 'Inactivo' && 'error') || 'info'}
             sx={{
               zIndex: 9,
               top: 16,
@@ -45,7 +48,8 @@ export default function ShopProductCard({ product }) {
             {status}
           </Label>
         )}
-        <StyledProductImg alt={name} src={cover} />
+        {/* en la src tendríamos que poner una imagen por default cuado el producto no tenga imagen */}
+        <StyledProductImg alt={name} src={product.image?product.image.secure_url:"/assets/images/imageDefault.jpg"} /> 
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>

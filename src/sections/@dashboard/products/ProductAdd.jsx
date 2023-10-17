@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useFormik } from "formik";
+import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 
 // @mui
@@ -23,17 +23,12 @@ import { ProductContext } from "../../../contexts/ProductContext";
 // ----------------------------------------------------------------------
 
 const schema = Yup.object().shape({
-  productName: Yup.string().required(
-    "Debes ingresar un nombre"
-  ),
+  productName: Yup.string().required("Debes ingresar un nombre"),
   price: Yup.string().required("Debes ingresar el precio"),
   stock: Yup.string().required("Debes ingresar el stock"),
-  category: Yup.string().required(
-    "Debes seleccionar una categoría"
-  ),
-  detail: Yup.string().required(
-    "Debes ingresar una descripción "
-  ),
+  category: Yup.string().required("Debes seleccionar una categoría"),
+  detail: Yup.string().required("Debes ingresar una descripción "),
+  image: Yup.mixed().required('Debes seleccionar una imagen'),
 });
 
 export default function ProductAdd() {
@@ -44,7 +39,6 @@ export default function ProductAdd() {
     console.log(state.categories);
   }, [state.isLoading]);
 
-
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
@@ -54,14 +48,15 @@ export default function ProductAdd() {
         status: "Activo",
         category: "",
         detail: "",
-        image: "",
+        image: {},
       },
       validationSchema: schema,
+      
 
       onSubmit: (values, { resetForm }) => {
         console.log("enviando formulario");
-        // console.log(values);
-        addProduct(values)
+        console.log(values);
+        addProduct(values);
         resetForm();
       },
     });
@@ -152,7 +147,10 @@ export default function ProductAdd() {
                       required
                     >
                       {state.categories.map((categoria) => (
-                        <MenuItem key={categoria._id} value={categoria.categoryName}>
+                        <MenuItem
+                          key={categoria._id}
+                          value={categoria.categoryName}
+                        >
                           {categoria.categoryName}
                         </MenuItem>
                       ))}
@@ -204,14 +202,17 @@ export default function ProductAdd() {
                 <TextField
                   name="image"
                   type="file"
+                  accept="image/*"
                   required
                   fullWidth
                   id="image"
                   autoComplete="off"
-                  value={values.image}
+                  // value={values.image}
                   error={touched.image && errors.image ? true : false}
                   helperText={touched.image && errors.image}
-                  onChange={handleChange}
+                  onChange={(event) => {
+                    setFieldValue('image', event.target.files[0]);
+                  }}
                 />
               </Grid>
             </Grid>

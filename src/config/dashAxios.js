@@ -9,6 +9,7 @@ dashAxios.interceptors.request.use( config  => {
     config.headers = {
         ...config.headers,
         'x-token': localStorage.getItem('tokenAuth'),
+        'Content-Type': 'multipart/form-data'
     }
     return  config;
 });

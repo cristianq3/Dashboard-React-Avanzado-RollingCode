@@ -5,7 +5,7 @@ import { types } from "../types/types";
 import { dashAxios } from "../config/dashAxios";
 
 const initialState = {
-  products: null,
+  products: [],
   categories:[],
   errorMessage: "",
   isLoading: true,
@@ -17,22 +17,30 @@ export const ProductProvider = ({ children }) => {
   
   
   const addProduct = async (values) => {
+    console.log(values.image)
+    const formData = new FormData();
+    formData.append('productName', values.productName);
+    formData.append('price', values.price);
+    formData.append('stock', values.stock);
+    formData.append('status', values.status);
+    formData.append('category', values.category);
+    formData.append('detail', values.detail); 
+    formData.append('image', values.image);
+console.log(formData);
     try {
-      console.log(values)
-      const response = await dashAxios.post("/products", {
-        productName: values.productName,
-        price: values.price,
-        stock: values.stock,
-        status: values.status,
-        category: values.category,
-        detail: values.detail,
-        Image: values.image
+      
+      const response = await dashAxios.post("/products", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', 
+        },
       });
+      console.log(response);
       if (response.status === 201) {
         dispatch({
           type: types.products.addProduct,
           payload: {
-            products:values
+            products: formData,
+            isLoading: false  
           }
         });
       }
@@ -65,13 +73,34 @@ export const ProductProvider = ({ children }) => {
         }
       })
     }}
+  const getListProducts = async () => {
+    try {
+      const response = await dashAxios.get("/products");
+      console.log(response.data)
+      dispatch({
+        type: types.products.listProducts,
+        payload: {
+          products: response.data,
+        }
+      })
+      
+    }catch(error){
+      dispatch({
+        type: types.products.listProducts,
+        payload: {
+          errorMessage: error,
+        }
+      })
+    }
+  };
 
   return (
     <ProductContext.Provider
       value={{
         state,
         addProduct,
-        getListCategories
+        getListCategories,
+        getListProducts
       }}
     >
       {children}

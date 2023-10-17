@@ -5,8 +5,8 @@ export const ProductReducer = (state = {}, action) => {
     case types.products.listProducts:
       return {
         ...state,
-        products: action.payload,
-        errorMessage: "",
+        products: action.payload.products,
+        errorMessage: action.payload.errorMessage,
         isLoading: false,
       };
 
@@ -15,27 +15,28 @@ export const ProductReducer = (state = {}, action) => {
         ...state,
         products: action.payload.products,
         errorMessage: action.payload.errorMessage,
-        isLoading: false,
+        isLoading: action.payload.isLoading,
       };
 
     case types.products.deleteProduct:
       return {
         ...state,
-        products: action.payload,
-        errorMessage: "",
+        products: action.payload.products,
+        errorMessage: action.payload.errorMessage,
         isLoading: false,
       };
     case types.products.editProduct:
       return {
         ...state,
-        products: action.payload,
-        errorMessage: "",
+        products: action.payload.products,
+        errorMessage: action.payload.errorMessage,
         isLoading: false,
       };
       case types.products.getCategories:
         return {
           ...state,
           categories: action.payload.categories,
+          errorMessage: action.payload.errorMessage,
           isLoading: false,
         }
 
