@@ -17,11 +17,13 @@ import {
 import Avatar from "@mui/material/Avatar";
 import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
 import { LoadingButton } from "@mui/lab";
+// components
 import { UsersContext } from "../../../contexts/UsersContext";
-import { VALID_PASSWORD_REGEX } from "../../../helpers/regExp";
-import { useParams } from "react-router-dom";
+//import { VALID_PASSWORD_REGEX } from "../../../helpers/regExp";
+import { useNavigate, useParams } from "react-router-dom";
 
-//TODO: cambiar validaciones y corregir Name por name
+// ----------------------------------------------------------------------
+
 const schema = Yup.object().shape({
 
   firstname: Yup.string()
@@ -40,14 +42,6 @@ const schema = Yup.object().shape({
   .email()
   .required("Debes ingresar un correo electrónico"),
   
-  password: Yup.string()
-  .min(8, 'La contraseña debe tener al menos 8 caracteres')
-  .max(16, 'La contraseña no debe superar los 16 caracteres')
-  .required('Debes ingresar una constraseña')
-  .matches(VALID_PASSWORD_REGEX,
-    'La contraseña debe tener como mìnimo 8 caracteres , al menos un número, una minúscula, una mayúscula y no contener caracteres especiales.',
-),
-  
   role: Yup.string()
   .required("Debes seleccionar un Rol"),
   
@@ -56,9 +50,30 @@ const schema = Yup.object().shape({
 });
 
 export default function EditUserForm() {
-  const { getUser, userSelected, isLoadingUserSelected } = useContext(UsersContext);
+  const { getUser, userSelected, isLoadingUserSelected, editUser, state } = useContext(UsersContext);
+  const [userEdited, setUserEdited] = useState(false)
   const {id} = useParams()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    getUser(id)
+    setValues({
+      email: userSelected.email,
+      firstname: userSelected.firstname,
+      lastname: userSelected.lastname,
+      status: userSelected.status,
+      role: userSelected.role,
+    })
+  }, [isLoadingUserSelected]);
+
   
+  useEffect(() => {
+    setUserEdited(false);
+    console.log(state.users)
+  }, [userEdited])
+
+
+
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched, setValues } =
     useFormik({
       initialValues: {
@@ -68,29 +83,30 @@ export default function EditUserForm() {
         status: '',
         role: '',
       },
-      enableReinitialize: true,
       validationSchema: schema,
+
       onSubmit: (values, { resetForm }) => {
-        console.log(values);
-        //addProduct(values);
+        console.log("enviando formulario");
+        setUserEdited(true)
+        console.log({...values,id})
+        editUser({...values,id})
         resetForm();
+        setValues({
+          email: '',
+          firstname: '',
+          lastname: '',
+          status: '',
+          role: '',
+        })
+
+        if(state.errorMessage === "") {
+          navigate('/dashboard/user')
+        }
+         
       },
     });
-
-    useEffect(() => {
-      getUser(id)
-    }, [isLoadingUserSelected]);
    
-    useEffect(() => {
-      getUser(id)
-      setValues({
-        email: userSelected.email,
-        firstname: userSelected.firstname,
-        lastname: userSelected.lastname,
-        status: userSelected.status,
-        role: userSelected.role,
-      })
-    }, [userSelected]);
+
 
   return (
     <>
@@ -107,18 +123,13 @@ export default function EditUserForm() {
           </Avatar>
 
           <Typography variant="h4" gutterBottom>
-            Editar usuario
+            Editar Usuario
           </Typography>
 
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-
-            <Grid item xs={12} sm={6}>
+              {/* Nombre del producto */}
+              <Grid item xs={12} sm={6}>
                 <TextField
                   autoFocus
                   name="firstname"
@@ -126,23 +137,24 @@ export default function EditUserForm() {
                   required
                   fullWidth
                   id="firstname"
-                  label="Nombre/s"
+                  label="Nombre del Usuario"
                   autoComplete="off"
                   value={values.firstname || ''}
-                  error={touched.firstname && errors.firstname ? true : false}
+                  error={
+                    touched.firstname && errors.firstname ? true : false
+                  }
                   helperText={touched.firstname && errors.firstname}
                   onChange={handleChange}
                 />
               </Grid>
-
+              {/* Precio */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="lastname"
-                  type="text"
                   required
                   fullWidth
                   id="lastname"
-                  label="Apellido/s"
+                  label="Apellido de Usuario"
                   autoComplete="off"
                   value={values.lastname || ''}
                   error={touched.lastname && errors.lastname ? true : false}
@@ -150,41 +162,22 @@ export default function EditUserForm() {
                   onChange={handleChange}
                 />
               </Grid>
-
+              {/* Email */}
               <Grid item xs={12}>
-                <TextField
+              <TextField
                   name="email"
-                  type="email"
                   required
                   fullWidth
                   id="email"
-                  label="Correo electrónico"
+                  label="Email de usuario"
                   autoComplete="off"
                   value={values.email || ''}
-                  error={
-                    touched.email && errors.email ? true : false
-                  }
+                  error={touched.email && errors.email ? true : false}
                   helperText={touched.email && errors.email}
                   onChange={handleChange}
                 />
               </Grid>
-              
-              {/* <Grid item xs={12}>
-                <TextField
-                  name="password"
-                  type="text"
-                  required
-                  fullWidth
-                  id="password"
-                  label="Contraseña"
-                  autoComplete="off"
-                  value={values.password || ''}
-                  error={touched.password && errors.password ? true : false}
-                  helperText={touched.password && errors.password}
-                  onChange={handleChange}
-                />
-              </Grid> */}
-
+              {/* Rol */}
               <Grid item xs={12} sm={6}>
                 <Box>
                   <FormControl fullWidth>
@@ -206,6 +199,7 @@ export default function EditUserForm() {
                   </FormControl>
                 </Box>
               </Grid>
+              {/* Estado */}
               <Grid item xs={12} sm={6}>
                 <Box>
                   <FormControl fullWidth>
@@ -228,7 +222,8 @@ export default function EditUserForm() {
                   </FormControl>
                 </Box>
               </Grid>
-           
+              
+              {/* Imagen */}
               {/* <Grid item xs={12}>
                 <TextField
                   name="image"
@@ -237,20 +232,18 @@ export default function EditUserForm() {
                   fullWidth
                   id="image"
                   autoComplete="off"
-                  value={state.userSelected.avatar}
+                  value={values.image}
                   error={touched.image && errors.image ? true : false}
                   helperText={touched.image && errors.image}
                   onChange={handleChange}
                 />
               </Grid> */}
-
             </Grid>
           </Box>
-
           <LoadingButton
             sx={{ mt: 3 }}
             size="large"
-            type="submit"
+            type="button"
             variant="contained"
             onClick={handleSubmit}
           >
