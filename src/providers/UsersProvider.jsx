@@ -34,12 +34,12 @@ export const UsersProvider = ({ children }) => {
   const getUser = async (id) => {
     try {
       const  {data}  = await dashAxios.get(`auth/${id}`)
+      console.log('usuario seleccionado', data)
       dispatch({
         type: types.users.getUser,
         payload: {
             ...state,
-          userSelected: data,
-          isLoadingUserSelected: false
+          userSelected: data
         },
         
       });
@@ -92,7 +92,7 @@ export const UsersProvider = ({ children }) => {
         payload: {
           ...state,
           errorMessage: '',
-          isLoadingUserSelected: false
+          // isLoadingUserSelected: false
         },
       })
     } catch (error) {

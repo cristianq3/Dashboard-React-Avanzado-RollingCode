@@ -51,26 +51,47 @@ const schema = Yup.object().shape({
 
 export default function EditUserForm() {
   const { getUser, userSelected, isLoadingUserSelected, editUser, state } = useContext(UsersContext);
-  const [userEdited, setUserEdited] = useState(false)
+  const [userEdited, setUserEdited] = useState(true)
   const {id} = useParams()
   const navigate = useNavigate()
 
   useEffect(() => {
-    getUser(id)
-    setValues({
-      email: userSelected.email,
-      firstname: userSelected.firstname,
-      lastname: userSelected.lastname,
-      status: userSelected.status,
-      role: userSelected.role,
-    })
-  }, [isLoadingUserSelected]);
-
-  
-  useEffect(() => {
     setUserEdited(false);
-    console.log(state.users)
-  }, [userEdited])
+    getUser(id)
+    if (userSelected) {
+      setValues({
+        email: userSelected.email,
+        firstname: userSelected.firstname,
+        lastname: userSelected.lastname,
+        status: userSelected.status,
+        role: userSelected.role,
+      });
+    }
+  }, [])
+
+  useEffect(() => {
+    // getUser(id)
+    if (!isLoadingUserSelected && userSelected) {
+      setValues({
+        email: userSelected.email,
+        firstname: userSelected.firstname,
+        lastname: userSelected.lastname,
+        status: userSelected.status,
+        role: userSelected.role,
+      });
+    }
+  }, [isLoadingUserSelected, userSelected]);
+
+  // ----------------
+  // useEffect(() => {
+  //   getListUsers();
+  //   console.log(state.users);
+  // }, [isLoading]);
+
+  // useEffect(() => {
+  //   setUserDeleted(false);
+  //   console.log(state.users)
+  // }, [userDeleted])
 
 
 
