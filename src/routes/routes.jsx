@@ -14,7 +14,10 @@ import DashboardAppPage from "../pages/DashboardAppPage";
 import RegisterPage from "../pages/RegisterPage";
 import AuthLayout from "../layouts/authuser/AuthLayout";
 import { Loading } from "../components/loading/Loading";
+// import ContainerUserForm from "../sections/@dashboard/user/ContainerUserForm";
 import ProductAdd from "../sections/@dashboard/products/ProductAdd";
+import CreateUserForm from "../sections/@dashboard/user/CreateUserForm";
+import EditUserForm from "../sections/@dashboard/user/EditUserForm";
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +40,8 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
         { path: "user", element: <UserPage /> },
+        { path: "user/new", element: <CreateUserForm /> },
+        { path: 'user/edit/:id', element: <EditUserForm/>},
         { path: "products", element: <ProductsPage /> },
         { path: "addproduct", element: <ProductAdd /> },
         { path: "blog", element: <BlogPage /> },
@@ -55,13 +60,13 @@ export default function Router() {
       element: <SimpleLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: "404", element: <Page404 /> },
-        { path: "*", element: <Navigate to="/404" /> },
+        // { path: "404", element: <Page404 /> },
+        // { path: "*", element: <Navigate to="/404" /> },
       ],
     },
     {
-      path: "*",
-      element: <Navigate to="/404" replace />,
+      // path: "*",
+      // element: <Navigate to="/404" replace />,
     },
   ]);
 

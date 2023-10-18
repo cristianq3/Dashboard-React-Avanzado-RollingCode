@@ -4,6 +4,14 @@ export const types = {
         logout:  '[AUTH] - LOGOUT',
         registerUser: '[AUTH] - REGISTERUSER'
     },
+    users: {
+        getListUsers: '[USERS] - LISTUSERS',
+        getUser: '[USERS] - GETUSER',
+        createUser: '[USERS] - CREATEUSER',
+        editUser: '[USERS] - EDITUSER',
+        deleteUser: '[USERS] - DELETEUSER',
+        changePassword: '[USERS] - CHANGEPASSWORD'
+    },
     products: {
         listProducts: '[PRODUCTS] - LISTPRODUCTS',
         addProduct: '[PRODUCTS] - ADDPRODUCT',
