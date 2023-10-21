@@ -115,6 +115,22 @@ export const ProductProvider = ({ children }) => {
     }
   };
   
+  const getProduct = async (id) => {
+    try {
+      const  {data}  = await dashAxios.get(`products/${id}`)
+      console.log('Producto seleccionado', data)
+      dispatch({
+        type: types.product.getProduct,
+        payload: {
+            ...state,
+          productSelected: data
+        },
+        
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  } 
 
   const handleDelete = (idSelected) => {
     console.log(idSelected);
@@ -152,6 +168,7 @@ export const ProductProvider = ({ children }) => {
         deleteProducto,
         getListProducts,
         handleDelete,
+        getProduct,
         ...state
       }}
     >
