@@ -1,10 +1,10 @@
-import { Helmet } from "react-helmet-async";
-import { useContext, useState, useEffect } from "react";
+import { Helmet } from 'react-helmet-async';
+import { useContext, useState, useEffect } from 'react';
 // @mui
-import { Container, Stack, Typography, Button } from "@mui/material";
+import { Container, Stack, Typography, Button } from '@mui/material';
 
 // @mui iconos
-import Iconify from "../components/iconify";
+import Iconify from '../components/iconify';
 
 // components
 import {
@@ -12,9 +12,9 @@ import {
   ProductList,
   ProductCartWidget,
   ProductFilterSidebar,
-} from "../sections/@dashboard/products";
+} from '../sections/@dashboard/products';
 // context
-import { ProductContext } from "../contexts/ProductContext";
+import { ProductContext } from '../contexts/ProductContext';
 // mock
 //import PRODUCTS from "../_mock/products";
 //import { Link } from "react-router-dom";
@@ -23,12 +23,19 @@ import { ProductContext } from "../contexts/ProductContext";
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
-  const { state, getListProducts } = useContext(ProductContext);
+  const { state, getListProducts, isLoading, deleteProduct } =
+    useContext(ProductContext);
+  const [productDeleted, setProductDeleted] = useState(false);
 
   useEffect(() => {
     getListProducts();
     console.log(state.products);
-  }, [state.isLoading]);
+  }, [isLoading]);
+
+  useEffect(() => {
+    deleteProduct();
+    console.log(state.products);
+  }, [productDeleted]);
 
   const handleOpenFilter = () => {
     setOpenFilter(true);

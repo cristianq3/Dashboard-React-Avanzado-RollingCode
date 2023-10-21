@@ -3,6 +3,7 @@ import { ProductContext } from '../contexts/ProductContext';
 import { ProductReducer } from '../reducers/ProductReducer';
 import { types } from '../types/types';
 import { dashAxios } from '../config/dashAxios';
+import Swal from 'sweetalert2';
 
 const initialState = {
   products: [],
@@ -91,13 +92,64 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+
+
+
+
+  const deleteProduct = async (id) => {
+    try {
+       await dashAxios.delete(`products/${id}`);
+      dispatch({
+        type: types.products.deleteProduct,
+        payload: {
+          ...state,
+          errorMessage: '',
+        },
+      })
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const handleDelete = (idSelected) => {
+    console.log(idSelected);
+    // deleteUser(idSelected);
+    Swal.fire({
+      title: `¿Seguro que deseas eliminar el producto?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#76B0F1",
+      cancelButtonColor: "#B72136",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteUser(idSelected);
+        setUserDeleted(true)
+        Swal.fire({
+          text: `Se eliminó el producto correctamente`,
+          icon: "success",
+          timer: 1700,
+          showConfirmButton: false,
+        });
+      }
+    });
+
+  };
+
+
   return (
     <ProductContext.Provider
       value={{
         state,
         addProduct,
         getListCategories,
+        deleteProduct,
         getListProducts,
+        handleDelete,
+        ...state
       }}
     >
       {children}

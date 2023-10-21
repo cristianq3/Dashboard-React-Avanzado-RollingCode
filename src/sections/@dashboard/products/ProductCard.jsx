@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
 //import imageDefault from "../../../../public/assets/images/imageDefault.jpg"
 // @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Link, Typography, Stack, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 // components
 import Label from '../../../components/label';
 import { ColorPreview } from '../../../components/color-utils';
+import { Delete, DeleteForever } from '@mui/icons-material';
+import { useContext } from 'react';
+import { ProductContext } from '../../../contexts/ProductContext';
+
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +30,8 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { productName: name,  price, status, priceSale } = product;
+  const {handleDelete} = useContext(ProductContext)
+  const { productName: name,  price, status, priceSale, _id } = product;
 
   // si le agregamos el campo colors a la base de datos tenemos que reemplazar este array por ese campo
   const colors = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
@@ -53,11 +58,20 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
+        <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>   
         <Link color="inherit" underline="hover">
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
+          
         </Link>
+        <Box>
+          
+          <Button onClick={(  )=> handleDelete(_id)}> <DeleteForever sx={{color:'red'}} /> </Button>
+           </Box>
+
+
+ </Box>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <ColorPreview colors={colors} />

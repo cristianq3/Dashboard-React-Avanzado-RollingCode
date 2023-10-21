@@ -70,7 +70,6 @@ export default function ProductAdd() {
         console.log(values);
         addProduct(values);
         resetForm();
-
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -78,8 +77,8 @@ export default function ProductAdd() {
           showConfirmButton: false,
           timer: 1500,
         });
-
         navigate('/dashboard/products')
+        
       },
     });
 
