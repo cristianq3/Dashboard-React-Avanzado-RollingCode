@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import { Field, useFormik } from "formik";
-import * as Yup from "yup";
+import { useContext, useEffect, useState } from 'react';
+import { Field, useFormik } from 'formik';
+import * as Yup from 'yup';
 
 // @mui
 import {
@@ -13,51 +13,73 @@ import {
   Select,
   MenuItem,
   TextField,
-} from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
-import { LoadingButton } from "@mui/lab";
+} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+import { LoadingButton } from '@mui/lab';
 // components
-import { ProductContext } from "../../../contexts/ProductContext";
+import { ProductContext } from '../../../contexts/ProductContext';
+import Swal from 'sweetalert2';
+import { Navigate, useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
 const schema = Yup.object().shape({
-  productName: Yup.string().required("Debes ingresar un nombre"),
-  price: Yup.string().required("Debes ingresar el precio"),
-  stock: Yup.string().required("Debes ingresar el stock"),
-  category: Yup.string().required("Debes seleccionar una categoría"),
-  detail: Yup.string().required("Debes ingresar una descripción "),
+  productName: Yup.string().required('Debes ingresar un nombre'),
+  price: Yup.string().required('Debes ingresar el precio'),
+  stock: Yup.string().required('Debes ingresar el stock'),
+  category: Yup.string().required('Debes seleccionar una categoría'),
+  detail: Yup.string().required('Debes ingresar una descripción '),
   image: Yup.mixed().required('Debes seleccionar una imagen'),
 });
 
+
+
+
 export default function ProductAdd() {
-  const { state, addProduct, getListCategories } = useContext(ProductContext);
+  const { state, addProduct, getListCategories, getListProducts } =
+    useContext(ProductContext);
+
+  useEffect(() => {
+    getListProducts();
+  }, []);
 
   useEffect(() => {
     getListCategories();
     console.log(state.categories);
   }, [state.isLoading]);
 
+
+  const navigate = useNavigate()
+
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
-        productName: "",
-        price: "",
-        stock: "",
-        status: "Activo",
-        category: "",
-        detail: "",
+        productName: '',
+        price: '',
+        stock: '',
+        status: 'Activo',
+        category: '',
+        detail: '',
         image: {},
       },
       validationSchema: schema,
-      
 
       onSubmit: (values, { resetForm }) => {
-        console.log("enviando formulario");
+        console.log('enviando formulario');
         console.log(values);
         addProduct(values);
         resetForm();
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Su producto fué cargado correctamente',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        navigate('/dashboard/products')
       },
     });
 
@@ -66,12 +88,12 @@ export default function ProductAdd() {
       <Container component="main" maxWidth="sm">
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "left",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'left',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <AddTwoToneIcon />
           </Avatar>
 
@@ -142,7 +164,7 @@ export default function ProductAdd() {
                       value={values.category}
                       label="Categoría"
                       onChange={(e) => {
-                        setFieldValue("category", e.target.value);
+                        setFieldValue('category', e.target.value);
                       }}
                       required
                     >
@@ -170,7 +192,7 @@ export default function ProductAdd() {
                       value={values.status}
                       label="Estado"
                       onChange={(e) => {
-                        setFieldValue("status", e.target.value);
+                        setFieldValue('status', e.target.value);
                       }}
                       required
                     >
