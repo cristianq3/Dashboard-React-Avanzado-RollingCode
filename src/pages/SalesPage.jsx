@@ -2,35 +2,22 @@ import { Helmet } from "react-helmet-async";
 import { faker } from "@faker-js/faker/locale/es";
 // @mui
 import { useTheme } from "@mui/material/styles";
-import { Grid, Container, Typography, Modal, Box, Button } from "@mui/material";
+import { Grid, Container, Typography } from "@mui/material";
 // sections
 import {
   AppOrderTimeline,
   AppCurrentVisits,
-  AppWebsiteVisits,
   AppConversionRates,
 } from "../sections/@dashboard/app";
-import { DataGrid, esES } from "@mui/x-data-grid";
-import { useState } from "react";
-import { fDate } from "../utils/formatTime";
-import Carousel from "../components/carousel/Carousel";
-import useSWR from "swr";
-import { dashAxios } from "../config/dashAxios";
+
+import SalesChart from "../sections/@dashboard/app/SalesChart";
+import useSales from "../hooks/useSales";
+import { SalesDataTable } from "../components/data-table/SalesDataTable";
 
 // ----------------------------------------------------------------------
 
-const fetcher = () => dashAxios.get("/sales").then((res) => res.data);
-
 export default function SalesPage() {
   const theme = useTheme();
-
-  const {
-    data: state,
-    error,
-    isLoading,
-  } = useSWR(import.meta.env.VITE_API_BACKEND, fetcher, {
-    refreshInterval: 1000,
-  });
 
   return (
     <>
@@ -45,46 +32,11 @@ export default function SalesPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <DataTable sales={isLoading ? [] : state} />
+            <SalesDataTable />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
-            <AppWebsiteVisits
-              title="Ventas por día"
-              subheader="Usa esta herramienta para medir el desempeño diario de tu tienda."
-              chartLabels={[
-                "Ene '23",
-                "Feb '23",
-                "Mar '23",
-                "Abr '23",
-                "May '23",
-                "Jun '23",
-                "Jul '23",
-                "Ago '23",
-                "Sep '23",
-                "Oct '23",
-              ]}
-              chartData={[
-                {
-                  name: "Equipo A",
-                  type: "column",
-                  fill: "solid",
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22],
-                },
-                {
-                  name: "Equipo B",
-                  type: "area",
-                  fill: "gradient",
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27],
-                },
-                {
-                  name: "Equipo C",
-                  type: "line",
-                  fill: "solid",
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36],
-                },
-              ]}
-            />
+            <SalesChart />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
@@ -147,107 +99,5 @@ export default function SalesPage() {
         </Grid>
       </Container>
     </>
-  );
-}
-
-const columns = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 200,
-  },
-  {
-    field: "fecha",
-    headerName: "Fecha",
-    width: 160,
-  },
-  {
-    field: "comprador",
-    headerName: "Comprador",
-    width: 160,
-  },
-  {
-    field: "valor",
-    headerName: "Valor",
-    type: "number",
-    width: 130,
-    sortable: false,
-    headerAlign: "left",
-    align: "left",
-  },
-
-  {
-    field: "productos",
-    headerName: "Productos",
-    renderCell: (products) => <BasicModal products={products.value} />,
-    sortable: false,
-    width: 160,
-  },
-];
-
-const BasicModal = ({ products }) => {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  return (
-    <div>
-      <Button onClick={handleOpen}>Ver productos</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Carousel products={products} />
-        </Box>
-      </Modal>
-    </div>
-  );
-};
-
-function DataTable({ sales }) {
-  const rowsWithFormat = sales.map((sale) => ({
-    id: sale._id,
-    comprador: `${sale.user.firstname} ${sale.user.lastname}`,
-    productos: sale.cartProducts,
-    valor: new Intl.NumberFormat("es-AR", {
-      style: "currency",
-      currency: "ARS",
-    }).format(sale.totalPrice),
-    fecha: fDate(sale.saleDate, "dd MMMM yyyy"),
-  }));
-
-  return (
-    <div style={{ height: 400, width: "100%" }}>
-      <Container>
-        <DataGrid
-          rows={rowsWithFormat}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          column
-          pageSizeOptions={[5, 10]}
-          rowSelection={false}
-          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-        />
-      </Container>
-    </div>
   );
 }

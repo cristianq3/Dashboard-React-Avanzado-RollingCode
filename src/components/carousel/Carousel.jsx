@@ -1,10 +1,9 @@
 import Carousel from "react-material-ui-carousel";
-import { Paper, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
+0;
 import Typography from "@mui/material/Typography";
 
 export const SalesCarousel = ({ products }) => {
@@ -30,7 +29,10 @@ function Item({ product }) {
           component="img"
           alt={product.productName}
           height="440"
-          image={product._id.image.secure_url}
+          image={
+            product._id?.image?.secure_url ||
+            "/assets/illustrations/illustration_404.svg"
+          }
           style={{ padding: 4, background: "#000" }}
         />
         <CardContent>
