@@ -10,7 +10,10 @@ const initialState = {
   categories: [],
   errorMessage: '',
   isLoading: true,
+  productDeleted: false
 };
+
+
 
 export const ProductProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ProductReducer, initialState);
@@ -96,7 +99,7 @@ export const ProductProvider = ({ children }) => {
 
 
 
-  const deleteProduct = async (id) => {
+  const deleteProducto = async (id) => {
     try {
        await dashAxios.delete(`products/${id}`);
       dispatch({
@@ -111,7 +114,7 @@ export const ProductProvider = ({ children }) => {
       console.log(error);
     }
   };
-
+  
 
   const handleDelete = (idSelected) => {
     console.log(idSelected);
@@ -126,8 +129,8 @@ export const ProductProvider = ({ children }) => {
       cancelButtonColor: "#B72136",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteUser(idSelected);
-        setUserDeleted(true)
+        deleteProduct(idSelected);
+    
         Swal.fire({
           text: `Se eliminó el producto correctamente`,
           icon: "success",
@@ -146,7 +149,7 @@ export const ProductProvider = ({ children }) => {
         state,
         addProduct,
         getListCategories,
-        deleteProduct,
+        deleteProducto,
         getListProducts,
         handleDelete,
         ...state

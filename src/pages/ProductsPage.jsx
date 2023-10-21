@@ -23,9 +23,9 @@ import { ProductContext } from '../contexts/ProductContext';
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
-  const { state, getListProducts, isLoading, deleteProduct } =
+  const { state, getListProducts, isLoading, deleteProducto, productDeleted } =
     useContext(ProductContext);
-  const [productDeleted, setProductDeleted] = useState(false);
+
 
   useEffect(() => {
     getListProducts();
@@ -33,7 +33,7 @@ export default function ProductsPage() {
   }, [isLoading]);
 
   useEffect(() => {
-    deleteProduct();
+    deleteProducto();
     console.log(state.products);
   }, [productDeleted]);
 

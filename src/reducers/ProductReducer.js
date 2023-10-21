@@ -24,6 +24,7 @@ export const ProductReducer = (state = {}, action) => {
         products: action.payload.products,
         errorMessage: action.payload.errorMessage,
         isLoading: false,
+        productDeleted: true,
       };
     case types.products.editProduct:
       return {

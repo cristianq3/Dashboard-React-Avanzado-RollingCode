@@ -67,7 +67,7 @@ export default function ShopProductCard({ product }) {
         </Link>
         <Box>
           
-          <Button onClick={(  )=> handleDelete(_id)}> <DeleteForever sx={{color:'red'}} /> </Button>
+           <Button onClick={(_id  )=> handleDelete(_id)}> <DeleteForever sx={{color:'red'}} /> </Button>
            </Box>
 
 
