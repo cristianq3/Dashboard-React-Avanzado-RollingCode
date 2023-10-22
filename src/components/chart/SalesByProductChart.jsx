@@ -10,7 +10,7 @@ import useSalesFilter from "../../hooks/useSalesFilter";
 
 // ----------------------------------------------------------------------
 
-const CHART_HEIGHT = 380;
+const CHART_HEIGHT = 410;
 const LEGEND_HEIGHT = 72;
 
 const StyledChartWrapper = styled("div")(({ theme }) => ({

@@ -93,6 +93,16 @@ export function SalesDataTable() {
     (a, b) => new Date(b.fecha) - new Date(a.fecha)
   );
 
+  if (error) {
+    return (
+      <Container>
+        <Typography variant="h3">
+          Error al obtener datos. Intente nuevamente más tarde
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
     <div style={{ height: 400, width: "100%" }}>
       <Container>
