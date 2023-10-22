@@ -10,6 +10,7 @@ const columns = [
     field: "id",
     headerName: "ID",
     width: 200,
+    sortable: false,
   },
   {
     field: "fecha",
@@ -19,6 +20,7 @@ const columns = [
   {
     field: "comprador",
     headerName: "Comprador",
+    sortable: false,
     width: 160,
   },
   {
@@ -87,11 +89,15 @@ export function SalesDataTable() {
     fecha: fDate(sale.saleDate, "dd MMMM yyyy"),
   }));
 
+  const rowsWithFormatSorted = rowsWithFormat?.sort(
+    (a, b) => new Date(b.fecha) - new Date(a.fecha)
+  );
+
   return (
     <div style={{ height: 400, width: "100%" }}>
       <Container>
         <DataGrid
-          rows={isLoading ? [] : rowsWithFormat}
+          rows={isLoading ? [] : rowsWithFormatSorted}
           columns={columns}
           initialState={{
             pagination: {

@@ -16,7 +16,7 @@ import { useChart } from "../../../components/chart";
 import useSalesFilter from "../../../hooks/useSalesFilter";
 import { fCurrency } from "../../../utils/formatNumber";
 import { useState } from "react";
-import { fDate } from "../../../utils/formatTime";
+import { fDate, fWeek } from "../../../utils/formatTime";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
@@ -31,12 +31,6 @@ export default function SalesChart() {
   } = useSalesFilter(`/sales/filter/dailySales`);
 
   const {
-    sales: weeklySales,
-    isLoading: isLoadingWeeklySales,
-    error: weeklySalesError,
-  } = useSalesFilter(`/sales/filter/weeklySales`);
-
-  const {
     sales: monthlySales,
     isLoading: isLoadingMonthlySales,
     error: monthlySalesError,
@@ -46,20 +40,39 @@ export default function SalesChart() {
     return [
       {
         x: dailySales?.currentDate,
-        y: dailySales?.totalDailySalesQuantity,
+        y: dailySales?.totalDailySalesQuantity || 0,
       },
     ];
   };
 
-  const weeklySalesWithDataFormat = () => {
-    return weeklySales?.dailySales.map((sale) => ({
+  const monthlySalesWithDataFormat = () => {
+    return monthlySales?.monthlySales.map((sale) => ({
       x: sale.saleDate,
       y: sale.totalSalesQuantity,
     }));
   };
 
-  const monthlySalesWithDataFormat = () => {
-    return monthlySales?.monthlySales.map((sale) => ({
+  const { formattedFirstDay, formattedLastDay } = fWeek();
+
+  const startOfWeek = new Date(formattedFirstDay);
+  const endOfWeek = new Date(`${formattedLastDay}T23:59:59`);
+
+  const salesInLastWeek = monthlySales?.monthlySales.filter((sale) => {
+    const saleDate = new Date(sale.saleDate);
+    return saleDate >= startOfWeek && saleDate <= endOfWeek;
+  });
+
+  const totalSalesQuantityLastWeek = salesInLastWeek?.reduce(
+    (total, sale) => total + sale.totalSalesQuantity,
+    0
+  );
+  const totalSalesPriceLastWeek = salesInLastWeek?.reduce(
+    (total, sale) => total + sale.totalSalesPrice,
+    0
+  );
+
+  const weeklySalesWithDataFormat = () => {
+    return salesInLastWeek?.map((sale) => ({
       x: sale.saleDate,
       y: sale.totalSalesQuantity,
     }));
@@ -81,7 +94,7 @@ export default function SalesChart() {
       name: "Semana",
       type: "area",
       fill: "gradient",
-      data: isLoadingWeeklySales ? [] : weeklySalesWithDataFormat(),
+      data: isLoadingMonthlySales ? [] : weeklySalesWithDataFormat(),
     },
     {
       name: "Mes",
@@ -113,19 +126,12 @@ export default function SalesChart() {
       showForSingleSeries: true,
       showForZeroSeries: true,
     },
-    chart: {
-      events: {
-        mounted: (chartContext, config) => {
-          chartContext.hideSeries("Mes");
-        },
-      },
-    },
   });
 
-  if (dailySalesError || weeklySalesError || monthlySalesError) {
+  if (dailySalesError || monthlySalesError) {
     return (
       <Container>
-        <Typography variant="h1">
+        <Typography variant="h3">
           Error al obtener datos. Intente nuevamente más tarde
         </Typography>
       </Container>
@@ -145,7 +151,12 @@ export default function SalesChart() {
       </Box>
       <CardActions sx={{ pb: 3, display: "flex", justifyContent: "center" }}>
         <DailyModal dailySales={dailySales} />
-        <WeeklyModal weeklySales={weeklySales} />
+        <WeeklyModal
+          totalSalesQuantityLastWeek={totalSalesQuantityLastWeek}
+          totalSalesPriceLastWeek={totalSalesPriceLastWeek}
+          startOfWeek={formattedFirstDay}
+          endOfWeek={formattedLastDay}
+        />
         <MonthlyModal monthlySales={monthlySales} />
       </CardActions>
     </Card>
@@ -204,7 +215,7 @@ const DailyModal = ({ dailySales }) => {
                 <Typography variant="h5">
                   Ingresos Totales:
                   <span style={{ marginLeft: 5 }}>
-                    {fCurrency(dailySales?.totalDailySalesPrice)}
+                    {fCurrency(dailySales?.totalDailySalesPrice) || 0}
                   </span>
                 </Typography>
               </div>
@@ -223,7 +234,12 @@ const DailyModal = ({ dailySales }) => {
   );
 };
 
-const WeeklyModal = ({ weeklySales }) => {
+const WeeklyModal = ({
+  totalSalesQuantityLastWeek,
+  totalSalesPriceLastWeek,
+  startOfWeek,
+  endOfWeek,
+}) => {
   const style = {
     position: "absolute",
     top: "50%",
@@ -272,8 +288,8 @@ const WeeklyModal = ({ weeklySales }) => {
               <div style={{ textAlign: "center", marginBottom: "30px" }}>
                 <DateRangeIcon style={{ fontSize: 50, marginRight: 8 }} />
                 <Typography variant="h5">
-                  Desde: {weeklySales?.weekStartDate} - Hasta:
-                  {weeklySales?.weekEndDate}
+                  Desde: {startOfWeek} - Hasta:
+                  {endOfWeek}
                 </Typography>
               </div>
               <div style={{ textAlign: "center", marginBottom: "30px" }}>
@@ -281,7 +297,7 @@ const WeeklyModal = ({ weeklySales }) => {
                 <Typography variant="h5">
                   Ingresos Totales:
                   <span style={{ marginLeft: 5 }}>
-                    {fCurrency(weeklySales?.totalWeeklySalesPrice)}
+                    {fCurrency(totalSalesPriceLastWeek) || 0}
                   </span>
                 </Typography>
               </div>
@@ -289,7 +305,7 @@ const WeeklyModal = ({ weeklySales }) => {
                 <ShoppingBasketIcon style={{ fontSize: 50, marginRight: 8 }} />
                 <Typography variant="h5">
                   Cantidad de Ventas:
-                  {weeklySales?.totalWeeklySalesQuantity}
+                  {totalSalesQuantityLastWeek}
                 </Typography>
               </div>
             </CardContent>
@@ -358,7 +374,7 @@ const MonthlyModal = ({ monthlySales }) => {
                 <Typography variant="h5">
                   Ingresos Totales:
                   <span style={{ marginLeft: 5 }}>
-                    {fCurrency(monthlySales?.totalMonthlySalesPrice)}
+                    {fCurrency(monthlySales?.totalMonthlySalesPrice) || 0}
                   </span>
                 </Typography>
               </div>
