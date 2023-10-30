@@ -22,7 +22,6 @@ import { UsersContext } from "../../../contexts/UsersContext";
 import { VALID_PASSWORD_REGEX } from "../../../helpers/regExp";
 import { Navigate, useNavigate } from "react-router-dom";
 
-
 const schema = Yup.object().shape({
 
   firstname: Yup.string()

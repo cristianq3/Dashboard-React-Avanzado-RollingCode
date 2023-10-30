@@ -5,13 +5,17 @@ import "./index.css";
 import { AuthProvider } from "./providers/AuthProvider.jsx";
 import { ProductProvider } from "./providers/ProductProvider.jsx";
 import { UsersProvider } from "./providers/UsersProvider.jsx";
+import { Provider } from 'react-redux/es/exports.js'
+import { store } from './store/store.js'
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
       <UsersProvider>
         <ProductProvider>
-          <App />
+          <Provider store={store}>
+            <App />
+          </Provider>
         </ProductProvider>
       </UsersProvider>
     </AuthProvider>

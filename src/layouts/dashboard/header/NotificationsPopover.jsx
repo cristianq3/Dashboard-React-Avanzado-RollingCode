@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { set, sub } from 'date-fns';
 import { noCase } from 'change-case';
 import { faker } from '@faker-js/faker';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // @mui
 import {
   Box,
@@ -27,57 +27,92 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 
 // ----------------------------------------------------------------------
+import { useDispatch } from "react-redux/es";
+import { getNotifications } from '../../../slices/notification/thunks';
+import { useSelector } from "react-redux/es";
 
-const NOTIFICATIONS = [
-  {
-    id: faker.datatype.uuid(),
-    title: 'Your order is placed',
-    description: 'waiting for shipping',
-    avatar: null,
-    type: 'order_placed',
-    createdAt: set(new Date(), { hours: 10, minutes: 30 }),
-    isUnRead: true,
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: faker.name.fullName(),
-    description: 'answered to your comment on the Minimal',
-    avatar: '/assets/images/avatars/avatar_2.jpg',
-    type: 'friend_interactive',
-    createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
-    isUnRead: true,
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'You have new message',
-    description: '5 unread messages',
-    avatar: null,
-    type: 'chat_message',
-    createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'You have new mail',
-    description: 'sent from Guido Padberg',
-    avatar: null,
-    type: 'mail',
-    createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'Delivery processing',
-    description: 'Your order is being shipped',
-    avatar: null,
-    type: 'order_shipped',
-    createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
-    isUnRead: false,
-  },
-];
+import io from "socket.io-client"
+//const socket = io('http://localhost:4010/');
+
+// const NOTIFICATIONS = [
+//   {
+//     id: faker.datatype.uuid(),
+//     title: 'Your order is placed',
+//     description: 'waiting for shipping',
+//     avatar: null,
+//     type: 'order_placed',
+//     createdAt: set(new Date(), { hours: 10, minutes: 30 }),
+//     isUnRead: true,
+//   },
+//   {
+//     id: faker.datatype.uuid(),
+//     title: faker.name.fullName(),
+//     description: 'answered to your comment on the Minimal',
+//     avatar: '/assets/images/avatars/avatar_2.jpg',
+//     type: 'friend_interactive',
+//     createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
+//     isUnRead: true,
+//   },
+//   {
+//     id: faker.datatype.uuid(),
+//     title: 'You have new message',
+//     description: '5 unread messages',
+//     avatar: null,
+//     type: 'chat_message',
+//     createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
+//     isUnRead: false,
+//   },
+//   {
+//     id: faker.datatype.uuid(),
+//     title: 'You have new mail',
+//     description: 'sent from Guido Padberg',
+//     avatar: null,
+//     type: 'mail',
+//     createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
+//     isUnRead: false,
+//   },
+//   {
+//     id: faker.datatype.uuid(),
+//     title: 'Delivery processing',
+//     description: 'Your order is being shipped',
+//     avatar: null,
+//     type: 'order_shipped',
+//     createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
+//     isUnRead: false,
+//   },
+// ];
 
 export default function NotificationsPopover() {
+  const dispatch = useDispatch(); 
+  
+
+  //socket.on("Notificacion-New", (socket) => {
+  //  dispatch(getNotifications());
+    //setNotifications(NOTIFICATIONS)
+    //alert(socket);
+  //});
+  
+   const initSocket = () => {
+    let socket
+    socket = io('http://localhost:4010')
+    socket.on("Notificacion-New", (socket) => {
+      //alert(socket);
+      dispatch(getNotifications());
+    })
+  }
+
+  const { notification: NOTIFICATIONS } = useSelector( (state) => state.notificationsData)
+  //const { notification: notifications } = useSelector( (state) => state.notificationsData)
   const [notifications, setNotifications] = useState(NOTIFICATIONS);
+  const [addAll, setAddAll] = useState(false);
+
+  useEffect( () => {
+    setNotifications(NOTIFICATIONS)
+  }, [NOTIFICATIONS])
+
+  useEffect(() => {
+    initSocket();
+  },[])
 
   const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
@@ -97,6 +132,23 @@ export default function NotificationsPopover() {
         ...notification,
         isUnRead: false,
       }))
+    );
+  };
+  const OneAsRead = (_id) => {
+    setNotifications(notifications.map(notification => {
+      if (notification._id === _id) {
+        return {
+        ...notification,
+        isUnRead: false
+        }
+      } else {
+        return {
+        ...notification,
+        notification
+        }
+      }
+      
+      })
     );
   };
 
@@ -151,7 +203,7 @@ export default function NotificationsPopover() {
             }
           >
             {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+              <NotificationItem key={notification._id} notification={notification} OneAsRead = {(_id) => OneAsRead(_id)} />
             ))}
           </List>
 
@@ -164,18 +216,33 @@ export default function NotificationsPopover() {
             }
           >
             {notifications.slice(2, 5).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+              <NotificationItem key={notification._id} notification={notification} OneAsRead = {(_id) => OneAsRead(_id)} />
             ))}
           </List>
+
+          {addAll ? (
+            <List
+            disablePadding
+            subheader={
+              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
+                Before that
+              </ListSubheader>
+            }
+            >
+            {notifications.slice(5, 99).map((notification) => (
+              <NotificationItem key={notification._id} notification={notification} OneAsRead = {(_id) => OneAsRead(_id)} />
+            ))}
+            </List>) : null}
         </Scrollbar>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
+        {!addAll ? (
         <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
+          <Button fullWidth disableRipple onClick={ () => setAddAll(true)}>
             View All
           </Button>
-        </Box>
+        </Box>): null}
       </Popover>
     </>
   );
@@ -185,7 +252,8 @@ export default function NotificationsPopover() {
 
 NotificationItem.propTypes = {
   notification: PropTypes.shape({
-    createdAt: PropTypes.instanceOf(Date),
+    //createdAt: PropTypes.instanceOf(Date),
+    createdAt: PropTypes.any,
     id: PropTypes.string,
     isUnRead: PropTypes.bool,
     title: PropTypes.string,
@@ -195,9 +263,9 @@ NotificationItem.propTypes = {
   }),
 };
 
-function NotificationItem({ notification }) {
+function NotificationItem({ notification, OneAsRead }) {
   const { avatar, title } = renderContent(notification);
-
+ 
   return (
     <ListItemButton
       sx={{
@@ -228,6 +296,7 @@ function NotificationItem({ notification }) {
             {fToNow(notification.createdAt)}
           </Typography>
         }
+        onClick={ notification.isUnRead ? () => OneAsRead(notification._id) : null }
       />
     </ListItemButton>
   );

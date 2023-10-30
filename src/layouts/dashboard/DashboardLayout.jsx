@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -7,6 +7,8 @@ import Header from './header';
 import Nav from './nav';
 
 // ----------------------------------------------------------------------
+import { useDispatch } from "react-redux/es";
+import { getNotifications } from '../../slices/notification/thunks';
 
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
@@ -34,6 +36,11 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  
+  useEffect( () => {
+    dispatch(getNotifications());
+  }, []);  
 
   return (
     <StyledRoot>
