@@ -76,7 +76,7 @@ const BasicModal = ({ products }) => {
   );
 };
 
-export function SalesDataTable() {
+export function SalesDataTable({ marginTable, setMarginTable }) {
   const { sales, isLoading, error } = useSales();
   const rowsWithFormat = sales?.map((sale) => ({
     id: sale._id,
@@ -118,6 +118,13 @@ export function SalesDataTable() {
           pageSizeOptions={[5, 10]}
           rowSelection={false}
           localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+          onPaginationModelChange={() => {
+            if (marginTable === null || marginTable === 0) {
+              setMarginTable(35);
+            } else {
+              setMarginTable(0);
+            }
+          }}
         />
       </Container>
     </div>

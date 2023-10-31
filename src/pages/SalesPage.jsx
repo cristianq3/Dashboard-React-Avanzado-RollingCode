@@ -15,11 +15,13 @@ import useSales from "../hooks/useSales";
 import { SalesDataTable } from "../components/data-table/SalesDataTable";
 import SalesByProductChart from "../components/chart/SalesByProductChart";
 import YearlySalesChart from "../components/chart/YearlySalesChart";
+import { useState } from "react";
 
 // ----------------------------------------------------------------------
 
 export default function SalesPage() {
   const theme = useTheme();
+  const [marginTable, setMarginTable] = useState(0);
 
   return (
     <>
@@ -31,12 +33,22 @@ export default function SalesPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Ventas
         </Typography>
+        <Grid
+          container
+          spacing={3}
+          justifyContent={"center"}
+          marginBottom={marginTable}
+          style={{ height: "100%" }}
+        >
+          <Grid item xs={12}>
+            <SalesDataTable
+              setMarginTable={setMarginTable}
+              marginTable={marginTable}
+            />
+          </Grid>
+        </Grid>
 
         <Grid container spacing={3} justifyContent={"center"}>
-          <Grid item xs={12}>
-            <SalesDataTable />
-          </Grid>
-
           <Grid item xs={12} md={6} lg={8}>
             <SalesChart />
           </Grid>
