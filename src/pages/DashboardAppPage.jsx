@@ -17,6 +17,7 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from "../sections/@dashboard/app";
+import SalesChart from "../sections/@dashboard/app/SalesChart";
 
 // ----------------------------------------------------------------------
 
@@ -71,42 +72,7 @@ export default function DashboardAppPage() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
-            <AppWebsiteVisits
-              title="Visitas al sitio web"
-              subheader="(+43%) más que el último año"
-              chartLabels={[
-                "Ene '23",
-                "Feb '23",
-                "Mar '23",
-                "Abr '23",
-                "May '23",
-                "Jun '23",
-                "Jul '23",
-                "Ago '23",
-                "Sep '23",
-                "Oct '23",
-              ]}
-              chartData={[
-                {
-                  name: "Equipo A",
-                  type: "column",
-                  fill: "solid",
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22],
-                },
-                {
-                  name: "Equipo B",
-                  type: "area",
-                  fill: "gradient",
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27],
-                },
-                {
-                  name: "Equipo C",
-                  type: "line",
-                  fill: "solid",
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36],
-                },
-              ]}
-            />
+            <SalesChart />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
