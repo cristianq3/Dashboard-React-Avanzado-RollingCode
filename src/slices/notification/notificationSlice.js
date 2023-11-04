@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const InitialNotiState = {
     isLoading: false,
+    clientConnect: 0,
     notification: []
   };
 
@@ -18,6 +19,10 @@ const InitialNotiState = {
         state.isLoading = true
       },
 
+      clienteConectados: (state, action) => {
+        state.clientConnect = action.payload.clientConnect
+      },
+
       listarNotification: (state, action) => {
         state.isLoading = false,
         state.notification = action.payload.notification
@@ -28,5 +33,6 @@ const InitialNotiState = {
 export const { 
     setNotification,
     isLoadingNotification,
-    listarNotification
+    listarNotification,
+    clienteConectados
  } = notificationSlice.actions;

@@ -29,6 +29,7 @@ import Scrollbar from '../../../components/scrollbar';
 // ----------------------------------------------------------------------
 import { useDispatch } from "react-redux/es";
 import { getNotifications } from '../../../slices/notification/thunks';
+import { clienteConectados } from '../../../slices/notification/notificationSlice';
 import { useSelector } from "react-redux/es";
 
 import io from "socket.io-client"
@@ -86,18 +87,20 @@ export default function NotificationsPopover() {
   const dispatch = useDispatch(); 
   
 
-  //socket.on("Notificacion-New", (socket) => {
-  //  dispatch(getNotifications());
-    //setNotifications(NOTIFICATIONS)
-    //alert(socket);
-  //});
-  
    const initSocket = () => {
     let socket
-    socket = io('http://localhost:4010')
+    socket = io('http://localhost:4010');
+    //cambiar
+    //socket = io("https://api.example.com)"
     socket.on("Notificacion-New", (socket) => {
       //alert(socket);
       dispatch(getNotifications());
+    })
+    socket.on("Actualizar", (clientes_cenectados) => {
+      //alert(clientes_cenectados);
+      dispatch(clienteConectados({
+        clientConnect: clientes_cenectados
+    }));
     })
   }
 
@@ -107,7 +110,7 @@ export default function NotificationsPopover() {
   const [addAll, setAddAll] = useState(false);
 
   useEffect( () => {
-    setNotifications(NOTIFICATIONS)
+    setNotifications(NOTIFICATIONS);
   }, [NOTIFICATIONS])
 
   useEffect(() => {

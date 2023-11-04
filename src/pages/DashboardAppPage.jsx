@@ -5,6 +5,8 @@ import { useTheme } from "@mui/material/styles";
 import { Grid, Container, Typography } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
+import { useState, useEffect } from 'react';
+import { useSelector } from "react-redux/es";
 // sections
 import {
   AppTasks,
@@ -23,6 +25,13 @@ import SalesChart from "../sections/@dashboard/app/SalesChart";
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const [clientesConectados, setClientesConectados] = useState(0);
+
+  const { clientConnect } = useSelector( (state) => state.notificationsData)
+
+  useEffect( () => {
+    setClientesConectados(clientConnect);
+  }, [clientConnect])
 
   return (
     <>
@@ -47,7 +56,8 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Nuevos Usuarios"
-              total={1352831}
+              //total={1352831} 
+              total={clientesConectados}
               color="info"
               icon={"ant-design:apple-filled"}
             />
