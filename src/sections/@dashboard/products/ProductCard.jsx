@@ -8,9 +8,11 @@ import { fCurrency } from '../../../utils/formatNumber';
 // components
 import Label from '../../../components/label';
 import { ColorPreview } from '../../../components/color-utils';
-import { Delete, DeleteForever } from '@mui/icons-material';
+import { Delete, DeleteForever, Edit } from '@mui/icons-material';
 import { useContext } from 'react';
 import { ProductContext } from '../../../contexts/ProductContext';
+import {Link as LinkRouter} from 'react-router-dom'
+
 
 
 // ----------------------------------------------------------------------
@@ -30,7 +32,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const {handleDelete} = useContext(ProductContext)
+  const {handleDelete, editProduct} = useContext(ProductContext)
   const { productName: name,  price, status, priceSale, _id } = product;
 
   // si le agregamos el campo colors a la base de datos tenemos que reemplazar este array por ese campo
@@ -68,6 +70,14 @@ export default function ShopProductCard({ product }) {
         <Box>
           
            <Button onClick={(_id  )=> handleDelete(_id)}> <DeleteForever sx={{color:'red'}} /> </Button>
+           {/* <Button   href={`/dashboard/productos/edit/${_id}`} >  </Button> */}
+
+           <Button
+                              component={LinkRouter} to={`edit/${_id}`}
+                            >
+                            <Edit sx={{color:'blue'}} />
+                            </Button>
+        
            </Box>
 
 

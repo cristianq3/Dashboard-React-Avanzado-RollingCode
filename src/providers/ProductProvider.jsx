@@ -10,10 +10,8 @@ const initialState = {
   categories: [],
   errorMessage: '',
   isLoading: true,
-  productDeleted: false
+  productDeleted: false,
 };
-
-
 
 export const ProductProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ProductReducer, initialState);
@@ -46,7 +44,6 @@ export const ProductProvider = ({ children }) => {
           },
         });
       }
-
     } catch (error) {
       console.log(error);
       dispatch({
@@ -63,7 +60,8 @@ export const ProductProvider = ({ children }) => {
       dispatch({
         type: types.products.getCategories,
         payload: {
-          categories: response.data,
+          categories: response.data
+          
         },
       });
     } catch (error) {
@@ -95,69 +93,94 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-
-
-
-
   const deleteProducto = async (id) => {
     try {
-       await dashAxios.delete(`products/${id}`);
+      await dashAxios.delete(`products/${id}`);
       dispatch({
         type: types.products.deleteProduct,
         payload: {
           ...state,
           errorMessage: '',
         },
-      })
-
+      });
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   const getProduct = async (id) => {
     try {
-      const  {data}  = await dashAxios.get(`products/${id}`)
-      console.log('Producto seleccionado', data)
+      const { data } = await dashAxios.get(`products/${id}`);
       dispatch({
-        type: types.product.getProduct,
+        type: types.products.getProduct,
         payload: {
-            ...state,
-          productSelected: data
+          ...state,
+          productSelected: data,
         },
-        
       });
+      return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  } 
+  };
 
   const handleDelete = (idSelected) => {
     console.log(idSelected);
     // deleteUser(idSelected);
     Swal.fire({
       title: `¿Seguro que deseas eliminar el producto?`,
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: "#76B0F1",
-      cancelButtonColor: "#B72136",
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#76B0F1',
+      cancelButtonColor: '#B72136',
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteProduct(idSelected);
-    
+        deleteProducto(idSelected);
+
         Swal.fire({
           text: `Se eliminó el producto correctamente`,
-          icon: "success",
+          icon: 'success',
           timer: 1700,
           showConfirmButton: false,
         });
       }
     });
-
   };
 
+  const editProduct = async (values) => {
+
+    const { data } = await dashAxios.put(`products/${values._id}`, {
+      values,
+    });
+
+    console.log(data);
+
+    // if (data) {
+    //   const newProducts = state.products.map((item) => {
+    //     if (item._id == id) {
+    //       return {
+    //         _id: id,
+    //         nombreProducto,
+    //         precio,
+    //         imagen,
+    //         descripcion,
+    //         categoria,
+    //         __v: 0,
+    //       };
+    //     }
+    //     return item;
+    //   });
+
+    //   dispatch({
+    //     type: types.product.editProduct,
+    //     payload: {
+    //       products: newProducts,
+    //     },
+    //   });
+    // }
+  };
 
   return (
     <ProductContext.Provider
@@ -169,7 +192,8 @@ export const ProductProvider = ({ children }) => {
         getListProducts,
         handleDelete,
         getProduct,
-        ...state
+        editProduct,
+        ...state,
       }}
     >
       {children}

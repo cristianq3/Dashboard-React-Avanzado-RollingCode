@@ -18,6 +18,7 @@ import { Loading } from "../components/loading/Loading";
 import ProductAdd from "../sections/@dashboard/products/ProductAdd";
 import CreateUserForm from "../sections/@dashboard/user/CreateUserForm";
 import EditUserForm from "../sections/@dashboard/user/EditUserForm";
+import ProductEdit from "../sections/@dashboard/products/ProductEdit";
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +44,9 @@ export default function Router() {
         { path: "user/new", element: <CreateUserForm /> },
         { path: 'user/edit/:id', element: <EditUserForm/>},
         { path: "products", element: <ProductsPage /> },
+        { path: "products/edit/:id", element: <ProductEdit/> },
+   
+
         { path: "addproduct", element: <ProductAdd /> },
         { path: "blog", element: <BlogPage /> },
       ],

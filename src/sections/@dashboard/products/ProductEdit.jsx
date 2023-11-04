@@ -20,10 +20,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import { ProductContext } from '../../../contexts/ProductContext';
 import Swal from 'sweetalert2';
-import { Navigate, useNavigate } from 'react-router';
-
-
-
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -36,55 +33,125 @@ const schema = Yup.object().shape({
   image: Yup.mixed().required('Debes seleccionar una imagen'),
 });
 
-
-
-
 export default function ProductEdit() {
-  const { state, addProduct, getListCategories, getListProducts, getProduct } =
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+
+  const [productEdited, setProductEdited] = useState(true);
+
+  const { state, getProduct, productSelected, isLoading, getListCategories } =
     useContext(ProductContext);
 
-  useEffect(() => {
-    getListProducts();
-  }, []);
-  
-
-  useEffect(() => {
+ useEffect(() => {
     getListCategories();
     console.log(state.categories);
   }, [state.isLoading]);
 
+  
 
-  const navigate = useNavigate()
-
-  const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
-    useFormik({
-      initialValues: {
-        productName: '',
-        price: '',
-        stock: '',
-        status: 'Activo',
-        category: '',
-        detail: '',
+  useEffect(() => {
+    setProductEdited(false);
+    getProduct(id);
+    if (productSelected) {
+      setValues({
+        productName: productSelected.productName,
+        price: productSelected.price,
+        stock: productSelected.status,
+        status: productSelected.status,
+        category: productSelected.category,
+        detail: productSelected.detail,
         image: {},
-      },
-      validationSchema: schema,
+      });
+    }
+  }, []);
 
-      onSubmit: (values, { resetForm }) => {
-        console.log('enviando formulario');
-        console.log(values);
-        addProduct(values);
-        resetForm();
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Su producto fué cargado correctamente',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate('/dashboard/products')
-        
-      },
-    });
+  useEffect(() => {
+    if (!isLoading && productSelected) {
+      setValues({
+        productName: productSelected.productName,
+        price: productSelected.price,
+        stock: productSelected.status,
+        status: productSelected.status,
+        category: productSelected.category,
+        detail: productSelected.detail,
+        image: {},
+      });
+    }
+  }, [isLoading, productSelected]);
+
+  const {
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    setFieldValue,
+    touched,
+    setValues,
+  } = useFormik({
+    initialValues: {
+      productName: '',
+      price: '',
+      stock: '',
+      status: '',
+      category: '',
+      detail: '',
+      image: {},
+    },
+    validationSchema: schema,
+
+    onSubmit: (values, { resetForm }) => {
+      console.log('enviando formulario');
+      setProductEdited(true);
+      console.log({ ...values, id });
+      editUser({ ...values, id });
+      resetForm();
+      setValues({
+        email: '',
+        firstname: '',
+        lastname: '',
+        status: '',
+        role: '',
+      });
+
+      if (state.errorMessage === '') {
+        navigate('/dashboard/product');
+      }
+    },
+  });
+  //
+  // });
+
+  // useEffect(() => {
+  //   // setProductSelected();
+  //   getProduct(id);
+  //   if (productSelected) {
+  //     setValues({
+  //       productName: productSelected.productName,
+  //       price: productSelected.price,
+  //       stock: productSelected.status,
+  //       status: productSelected.status,
+  //       category: productSelected.category,
+  //       detail: productSelected.detail,
+  //     });
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   getProduct(id)
+  //   if ( productSelected) {
+  //     setValues({
+  //       productName: productSelected.productName,
+  //       price: productSelected.price,
+  //       stock: productSelected.status,
+  //       status: productSelected.status,
+  //       category: productSelected.category,
+  //       detail: productSelected.detail,
+  //     });
+  //   }
+  //   // }, [productSelected]);
+
+  // console.log(productSelected)
 
   return (
     <>
@@ -101,7 +168,7 @@ export default function ProductEdit() {
           </Avatar>
 
           <Typography variant="h4" gutterBottom>
-            Agregar producto
+            Editar producto
           </Typography>
 
           <Box component="form" noValidate sx={{ mt: 3 }}>
@@ -223,7 +290,7 @@ export default function ProductEdit() {
                 />
               </Grid>
               {/* Imagen */}
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   name="image"
                   type="file"
@@ -239,7 +306,7 @@ export default function ProductEdit() {
                     setFieldValue('image', event.target.files[0]);
                   }}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
           <LoadingButton
