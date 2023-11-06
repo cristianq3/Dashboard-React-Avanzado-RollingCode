@@ -107,11 +107,13 @@ export default function ProductEdit() {
       editUser({ ...values, id });
       resetForm();
       setValues({
-        email: '',
-        firstname: '',
-        lastname: '',
+        productName: '',
+        price: '',
+        stock: '',
         status: '',
-        role: '',
+        category: '',
+        detail: '',
+        image: {},
       });
 
       if (state.errorMessage === '') {
