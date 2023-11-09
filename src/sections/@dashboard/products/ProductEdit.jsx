@@ -30,7 +30,7 @@ const schema = Yup.object().shape({
   stock: Yup.string().required('Debes ingresar el stock'),
   category: Yup.string().required('Debes seleccionar una categoría'),
   detail: Yup.string().required('Debes ingresar una descripción '),
-  image: Yup.mixed().required('Debes seleccionar una imagen'),
+  // image: Yup.mixed().required('Debes seleccionar una imagen'),
 });
 
 export default function ProductEdit() {
@@ -40,15 +40,19 @@ export default function ProductEdit() {
 
   const [productEdited, setProductEdited] = useState(true);
 
-  const { state, getProduct, productSelected, isLoading, getListCategories } =
-    useContext(ProductContext);
+  const {
+    state,
+    getProduct,
+    productSelected,
+    isLoading,
+    getListCategories,
+    editProduct,
+    errorMessage,
+  } = useContext(ProductContext);
 
- useEffect(() => {
+  useEffect(() => {
     getListCategories();
-    console.log(state.categories);
   }, [state.isLoading]);
-
-  
 
   useEffect(() => {
     setProductEdited(false);
@@ -61,7 +65,6 @@ export default function ProductEdit() {
         status: productSelected.status,
         category: productSelected.category,
         detail: productSelected.detail,
-        image: {},
       });
     }
   }, []);
@@ -71,11 +74,10 @@ export default function ProductEdit() {
       setValues({
         productName: productSelected.productName,
         price: productSelected.price,
-        stock: productSelected.status,
+        stock: productSelected.stock,
         status: productSelected.status,
         category: productSelected.category,
         detail: productSelected.detail,
-        image: {},
       });
     }
   }, [isLoading, productSelected]);
@@ -96,15 +98,12 @@ export default function ProductEdit() {
       status: '',
       category: '',
       detail: '',
-      image: {},
     },
     validationSchema: schema,
 
     onSubmit: (values, { resetForm }) => {
-      console.log('enviando formulario');
       setProductEdited(true);
-      console.log({ ...values, id });
-      editUser({ ...values, id });
+      editProduct({ ...values, _id: id });
       resetForm();
       setValues({
         productName: '',
@@ -113,11 +112,9 @@ export default function ProductEdit() {
         status: '',
         category: '',
         detail: '',
-        image: {},
       });
-
-      if (state.errorMessage === '') {
-        navigate('/dashboard/product');
+      if (errorMessage === '') {
+        navigate('/dashboard/products');
       }
     },
   });
@@ -318,7 +315,7 @@ export default function ProductEdit() {
             variant="contained"
             onClick={handleSubmit}
           >
-            Agregar
+            Editar
           </LoadingButton>
         </Box>
       </Container>

@@ -1,4 +1,4 @@
-import { types } from "../types/types";
+import { types } from '../types/types';
 
 export const ProductReducer = (state = {}, action) => {
   switch (action.type) {
@@ -30,24 +30,24 @@ export const ProductReducer = (state = {}, action) => {
       return {
         ...state,
         products: action.payload.products,
-        errorMessage: action.payload.errorMessage,
+        errorMessage: '',
         isLoading: false,
       };
-      case types.products.getCategories:
-        return {
-          ...state,
-          categories: action.payload.categories,
-          errorMessage: action.payload.errorMessage,
-          isLoading: false,
-        }
-      case types.products.getProduct:
-        return {
-          ...state,
-          categories: action.payload.categories,
-          errorMessage: action.payload.errorMessage,
-          productSelected: action.payload.productSelected,
-          isLoading: false,
-        }
+    case types.products.getCategories:
+      return {
+        ...state,
+        categories: action.payload.categories,
+        errorMessage: '',
+        isLoading: false,
+      };
+    case types.products.getProduct:
+      return {
+        ...state,
+        categories: action.payload.categories,
+        errorMessage: '',
+        productSelected: action.payload.productSelected,
+        isLoading: false,
+      };
 
     default:
       return state;

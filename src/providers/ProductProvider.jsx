@@ -60,8 +60,7 @@ export const ProductProvider = ({ children }) => {
       dispatch({
         type: types.products.getCategories,
         payload: {
-          categories: response.data
-          
+          categories: response.data,
         },
       });
     } catch (error) {
@@ -150,36 +149,43 @@ export const ProductProvider = ({ children }) => {
   };
 
   const editProduct = async (values) => {
+    try {
+      const { data } = await dashAxios.put(`products/${values._id}`, values);
+      console.log(data);
+      dispatch({
+        type: types.products.editProduct,
+        payload: {
+          ...state,
+          errorMessage: '',
+        },
+      });
 
-    const { data } = await dashAxios.put(`products/${values._id}`, {
-      values,
-    });
+      // if (data) {
+      //   const newProducts = state.products.map((item) => {
+      //     if (item._id == id) {
+      //       return {
+      //         _id: id,
+      //         nombreProducto,
+      //         precio,
+      //         imagen,
+      //         descripcion,
+      //         categoria,
+      //         __v: 0,
+      //       };
+      //     }
+      //     return item;
+      //   });
 
-    console.log(data);
-
-    // if (data) {
-    //   const newProducts = state.products.map((item) => {
-    //     if (item._id == id) {
-    //       return {
-    //         _id: id,
-    //         nombreProducto,
-    //         precio,
-    //         imagen,
-    //         descripcion,
-    //         categoria,
-    //         __v: 0,
-    //       };
-    //     }
-    //     return item;
-    //   });
-
-    //   dispatch({
-    //     type: types.product.editProduct,
-    //     payload: {
-    //       products: newProducts,
-    //     },
-    //   });
-    // }
+      //   dispatch({
+      //     type: types.product.editProduct,
+      //     payload: {
+      //       products: newProducts,
+      //     },
+      //   });
+      // }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
