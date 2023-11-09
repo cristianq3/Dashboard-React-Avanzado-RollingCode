@@ -19,21 +19,24 @@ import { ProductContext } from '../contexts/ProductContext';
 //import PRODUCTS from "../_mock/products";
 //import { Link } from "react-router-dom";
 
+import Swal from 'sweetalert2';
+
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
-  const { state, getListProducts, isLoading, deleteProducto, productDeleted } =
+  const { state, getListProducts, isLoading, deleteProduct } =
     useContext(ProductContext);
+
+  const [productDeleted, setProductDeleted] = useState(false);
 
   useEffect(() => {
     getListProducts();
-    console.log(state.products);
   }, [isLoading]);
 
   useEffect(() => {
-    // deleteProducto();
-    console.log(state.products);
+    setProductDeleted(false);
+    getListProducts();
   }, [productDeleted]);
 
   const handleOpenFilter = () => {
@@ -42,6 +45,33 @@ export default function ProductsPage() {
 
   const handleCloseFilter = () => {
     setOpenFilter(false);
+  };
+
+  const handleDelete = (_id) => {
+    try {
+      Swal.fire({
+        title: `¿Seguro que deseas eliminar el producto?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#76B0F1',
+        cancelButtonColor: '#B72136',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await deleteProduct(_id);
+          setProductDeleted(true);
+          Swal.fire({
+            text: `Se eliminó el producto correctamente`,
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -77,7 +107,9 @@ export default function ProductsPage() {
             <ProductSort />
           </Stack>
         </Stack>
-        {state.products && <ProductList products={state.products} />}
+        {state.products && (
+          <ProductList products={state.products} handleDelete={handleDelete} />
+        )}
         <ProductCartWidget />
       </Container>
     </>

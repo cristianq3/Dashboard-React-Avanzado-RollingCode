@@ -3,7 +3,6 @@ import { ProductContext } from '../contexts/ProductContext';
 import { ProductReducer } from '../reducers/ProductReducer';
 import { types } from '../types/types';
 import { dashAxios } from '../config/dashAxios';
-import Swal from 'sweetalert2';
 
 const initialState = {
   products: [],
@@ -17,7 +16,6 @@ export const ProductProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ProductReducer, initialState);
 
   const addProduct = async (values) => {
-    console.log(values.image);
     const formData = new FormData();
     formData.append('productName', values.productName);
     formData.append('price', values.price);
@@ -91,7 +89,7 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const deleteProducto = async (id) => {
+  const deleteProduct = async (id) => {
     try {
       await dashAxios.delete(`products/${id}`);
       dispatch({
@@ -117,33 +115,6 @@ export const ProductProvider = ({ children }) => {
         },
       });
       return data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleDelete = (_id) => {
-    try {
-      Swal.fire({
-        title: `¿Seguro que deseas eliminar el producto?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#76B0F1',
-        cancelButtonColor: '#B72136',
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await dashAxios.delete(`products/${_id}`);
-
-          Swal.fire({
-            text: `Se eliminó el producto correctamente`,
-            icon: 'success',
-            timer: 1700,
-            showConfirmButton: false,
-          });
-        }
-      });
     } catch (error) {
       console.log(error);
     }
@@ -195,9 +166,8 @@ export const ProductProvider = ({ children }) => {
         state,
         addProduct,
         getListCategories,
-        deleteProducto,
         getListProducts,
-        handleDelete,
+        deleteProduct,
         getProduct,
         editProduct,
         ...state,
