@@ -39,7 +39,6 @@ export const ProductProvider = ({ children }) => {
           type: types.products.addProduct,
           payload: {
             ...state,
-            isLoading: false,
             errorMessage: '',
           },
         });
@@ -123,29 +122,31 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const handleDelete = (idSelected) => {
-    console.log(idSelected);
-    // deleteUser(idSelected);
-    Swal.fire({
-      title: `¿Seguro que deseas eliminar el producto?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#76B0F1',
-      cancelButtonColor: '#B72136',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteProducto(idSelected);
+  const handleDelete = (_id) => {
+    try {
+      Swal.fire({
+        title: `¿Seguro que deseas eliminar el producto?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#76B0F1',
+        cancelButtonColor: '#B72136',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await dashAxios.delete(`products/${_id}`);
 
-        Swal.fire({
-          text: `Se eliminó el producto correctamente`,
-          icon: 'success',
-          timer: 1700,
-          showConfirmButton: false,
-        });
-      }
-    });
+          Swal.fire({
+            text: `Se eliminó el producto correctamente`,
+            icon: 'success',
+            timer: 1700,
+            showConfirmButton: false,
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const editProduct = async (values) => {

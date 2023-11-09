@@ -26,14 +26,13 @@ export default function ProductsPage() {
   const { state, getListProducts, isLoading, deleteProducto, productDeleted } =
     useContext(ProductContext);
 
-
   useEffect(() => {
     getListProducts();
     console.log(state.products);
   }, [isLoading]);
 
   useEffect(() => {
-    deleteProducto();
+    // deleteProducto();
     console.log(state.products);
   }, [productDeleted]);
 

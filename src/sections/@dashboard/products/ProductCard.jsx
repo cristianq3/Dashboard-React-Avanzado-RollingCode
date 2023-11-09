@@ -9,7 +9,7 @@ import { fCurrency } from '../../../utils/formatNumber';
 import Label from '../../../components/label';
 import { ColorPreview } from '../../../components/color-utils';
 import { Delete, DeleteForever, Edit } from '@mui/icons-material';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ProductContext } from '../../../contexts/ProductContext';
 import {Link as LinkRouter} from 'react-router-dom'
 
@@ -34,6 +34,10 @@ ShopProductCard.propTypes = {
 export default function ShopProductCard({ product }) {
   const {handleDelete, editProduct} = useContext(ProductContext)
   const { productName: name,  price, status, priceSale, _id } = product;
+
+  // useEffect(()=> {
+  //   console.log('id product card',_id)
+  // },[])
 
   // si le agregamos el campo colors a la base de datos tenemos que reemplazar este array por ese campo
   const colors = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
@@ -69,7 +73,7 @@ export default function ShopProductCard({ product }) {
         </Link>
         <Box>
           
-           <Button onClick={(_id  )=> handleDelete(_id)}> <DeleteForever sx={{color:'red'}} /> </Button>
+           <Button onClick={()=> handleDelete(_id)}> <DeleteForever sx={{color:'red'}} /> </Button>
            {/* <Button   href={`/dashboard/productos/edit/${_id}`} >  </Button> */}
 
            <Button
